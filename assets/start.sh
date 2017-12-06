@@ -1,7 +1,7 @@
 #!/bin/sh
 
-TMP="/home/bf2/tmp"
-VOLUME="/home/bf2"
+TMP='/home/bf2/tmp'
+VOLUME='/home/bf2'
 
 SRC="$TMP/srv/"
 DEST="$VOLUME/srv/"
