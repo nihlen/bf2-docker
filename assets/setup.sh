@@ -21,6 +21,7 @@ if [[ ! -e $INSTALLER ]]; then
 fi
 
 # Extract server files from the installer
+chmod +x $INSTALLER
 ./extract
 
 # Change owner
