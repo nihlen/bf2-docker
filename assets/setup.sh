@@ -22,6 +22,7 @@ fi
 
 # Extract server files from the installer
 chmod +x $INSTALLER
+chmod +x ./extract
 ./extract
 
 # Change owner

@@ -25,4 +25,5 @@ fi
 # Start Battlefield 2 server
 export TERM=xterm
 cd $DEST
+chmod +x ./start.sh
 ./start.sh
