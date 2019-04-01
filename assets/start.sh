@@ -41,6 +41,9 @@ chmod +x ./bin/amd-64/libbf2hub.so
 chmod +x ./bin/ia-32/bf2
 chmod +x ./bin/ia-32/libbf2hub.so
 
+# Start nginx
+service nginx start
+
 # Start Battlefield 2 server
 echo "Starting Battlefield 2 server..."
 export TERM=xterm

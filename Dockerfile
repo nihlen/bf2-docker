@@ -10,7 +10,6 @@ RUN apt-get -y update && \
     apt-get -y install nginx && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    systemctl enable nginx && \
     useradd --create-home --shell /bin/bash bf2
 
 # Add BF2 server installer to image
