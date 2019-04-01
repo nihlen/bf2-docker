@@ -1,6 +1,7 @@
 #!/bin/sh
 
 TMP='/home/bf2/tmp'
+DEMOS='/var/www/html/demos'
 
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
@@ -49,6 +50,10 @@ tar -xvf $BF2HUB_TGZ -C "$TMP/srv"
 
 # Move ModManager files into server directory
 tar -xvf $MODMANAGER_ZIP -C "$TMP/srv"
+
+# Create demos web folder
+mkdir -p $DEMOS
+chmod -R 700 $DEMOS/
 
 # Change owner
 chown -R bf2:bf2 /home/bf2/

@@ -7,8 +7,10 @@ ENV SERVER_NAME="bf2-docker"
 # Get required packages and create our user
 RUN apt-get -y update && \
     apt-get -y install wget expect libncurses5 && \
+    apt-get -y install nginx && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
+    systemctl enable nginx && \
     useradd --create-home --shell /bin/bash bf2
 
 # Add BF2 server installer to image

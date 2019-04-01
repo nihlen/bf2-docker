@@ -35,12 +35,12 @@ sv.teamVoteOnly 1
 sv.gameSpyPort 29900
 sv.allowNATNegotiation 0
 sv.interfaceIP "0.0.0.0"
-sv.autoRecord 0
+sv.autoRecord 1
 sv.demoIndexURL http://
 sv.demoDownloadURL http://
 sv.autoDemoHook "adminutils/demo/rotate_demo.py"
-sv.demoQuality 1
-sv.adminScript "default"
+sv.demoQuality 10
+sv.adminScript "modmanager"
 sv.timeBeforeRestartMap 30
 sv.autoBalanceTeam 0
 sv.teamRatioPercent 100

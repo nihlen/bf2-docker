@@ -14,13 +14,17 @@ else
     echo "$DEST is empty. Moving server files..."
     mv -n $SRC* $DEST
 
-    # Overwrite settings file
-    echo "Overwriting settings file..."
+    # Replace settings file
+    echo "Replacing settings file..."
     mv "$TMP/serversettings.con" "$DEST/mods/bf2/settings/"
 
-    # Overwrite modmanager file
-    echo "Overwriting modmanager file..."
+    # Replace modmanager file
+    echo "Replacing modmanager file..."
     mv "$TMP/modmanager.con" "$DEST/mods/bf2/settings/"
+
+    # Replace demo config file
+    echo "Replacing demo config file..."
+    mv "$TMP/rotate_demo.cfg" "$DEST/"
 
     # Delete our tmp directory
     echo "Deleting tmp directory..."
