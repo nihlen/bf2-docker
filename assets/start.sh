@@ -18,6 +18,10 @@ else
     echo "Overwriting settings file..."
     mv "$TMP/serversettings.con" "$DEST/mods/bf2/settings/"
 
+    # Overwrite modmanager file
+    echo "Overwriting modmanager file..."
+    mv "$TMP/modmanager.con" "$DEST/mods/bf2/settings/"
+
     # Delete our tmp directory
     echo "Deleting tmp directory..."
     rm -rf $SRC

@@ -10,6 +10,9 @@ INSTALLER_MD5='fa7bb15ab74ce3504339907f53f91f2b'
 BF2HUB_TGZ="$TMP/BF2Hub-Unranked-Linux-R3.tar.gz"
 BF2HUB_URL='https://www.bf2hub.com/downloads/BF2Hub-Unranked-Linux-R3.tar.gz'
 
+MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
+MODMANAGER_URL='http://blog.multiplay.co.uk/dropzone/ModManager-v2.2c.zip'
+
 # Verify that we have the required server files
 if [[ ! -e $INSTALLER ]]; then
     echo 'Downloading BF2 Dedicated Server 1.5.3153-802.0...'
@@ -30,6 +33,12 @@ if [[ ! -e $BF2HUB_TGZ ]]; then
     wget $BF2HUB_URL -O $BF2HUB_TGZ
 fi
 
+# Verify that we have the ModManager files
+if [[ ! -e $MODMANAGER_ZIP ]]; then
+    echo 'Downloading ModManager v2.2c...'
+    wget $MODMANAGER_URL -O $MODMANAGER_ZIP
+fi
+
 # Extract server files from the installer
 chmod +x $INSTALLER
 chmod +x ./extract
@@ -37,6 +46,9 @@ chmod +x ./extract
 
 # Move BF2Hub files into server directory
 tar -xvf $BF2HUB_TGZ -C "$TMP/srv"
+
+# Move ModManager files into server directory
+tar -xvf $MODMANAGER_ZIP -C "$TMP/srv"
 
 # Change owner
 chown -R bf2:bf2 /home/bf2/
