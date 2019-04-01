@@ -1,16 +1,20 @@
 #!/bin/sh
 
 TMP='/home/bf2/tmp'
+
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
-INSTALLER_GZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
-INSTALLER_URL='https://www.bf-games.net/downloads/954/bf2-dedicated-server-1-50-linux-build-1-5-3153-802-0.html?downloadnow&mirror=31635'
+INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
+INSTALLER_URL='ftp://ftp.bf-games.net/server-files/bf2/bf2-linuxded-1.5.3153.0-installer.tgz'
 INSTALLER_MD5='fa7bb15ab74ce3504339907f53f91f2b'
 
-# Verify that we have the required files
+BF2HUB_TGZ="$TMP/BF2Hub-Unranked-Linux-R3.tar.gz"
+BF2HUB_URL='https://www.bf2hub.com/downloads/BF2Hub-Unranked-Linux-R3.tar.gz'
+
+# Verify that we have the required server files
 if [[ ! -e $INSTALLER ]]; then
     echo 'Downloading BF2 Dedicated Server 1.5.3153-802.0...'
-    wget $INSTALLER_URL -O $INSTALLER_GZ
-    tar -xvf $INSTALLER_GZ -C $TMP
+    wget $INSTALLER_URL -O $INSTALLER_TGZ
+    tar -xvf $INSTALLER_TGZ -C $TMP
 
     # Check MD5
     MD5=($(md5sum $INSTALLER))
@@ -20,10 +24,19 @@ if [[ ! -e $INSTALLER ]]; then
     fi
 fi
 
+# Verify that we have the BF2Hub files required for online
+if [[ ! -e $BF2HUB_TGZ ]]; then
+    echo 'Downloading BF2Hub Unranked Linux R3...'
+    wget $BF2HUB_URL -O $BF2HUB_TGZ
+fi
+
 # Extract server files from the installer
 chmod +x $INSTALLER
 chmod +x ./extract
 ./extract
+
+# Move BF2Hub files into server directory
+tar -xvf $BF2HUB_TGZ -C "$TMP/srv"
 
 # Change owner
 chown -R bf2:bf2 /home/bf2/
