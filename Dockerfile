@@ -5,8 +5,9 @@ LABEL maintainer=nihlen
 ENV SERVER_NAME="bf2-docker"
 
 # Get required packages and create our user
-RUN apt-get -y update && \
-    apt-get -y install wget expect libncurses5 nginx unzip && \
+RUN apt -y update && \
+    apt-get -y update && \
+    apt-get -y install wget expect libncurses5 nginx unzip python && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --create-home --shell /bin/bash bf2
@@ -18,4 +19,5 @@ COPY ./assets ./
 # Extract server files
 RUN bash -x ./setup.sh
 
+#USER bf2
 CMD ./start.sh

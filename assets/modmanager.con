@@ -17,10 +17,11 @@ modmanager.rconModule "mm_rcon"
 # Modules
 #modmanager.loadModule "mm_tk_punish"
 #modmanager.loadModule "mm_kicker"
-modmanager.loadModule "mm_announcer"
+#modmanager.loadModule "mm_announcer"
 modmanager.loadModule "mm_bf2cc"
-#modmanager.loadModule "mm_autobalance"
+modmanager.loadModule "mm_autobalance"
 #modmanager.loadModule "mm_reserver"
+modmanager.loadModule "mm_iga"
 
 #
 # ModManager Announcer
@@ -33,7 +34,7 @@ modmanager.loadModule "mm_bf2cc"
 mm_autobalance.allowCommander 0
 mm_autobalance.allowSquadLeader 0
 mm_autobalance.allowSquadMember 0
-mm_autobalance.roundSwitch 0
+mm_autobalance.roundSwitch 1
 
 #
 # BF2CC for ModManager
@@ -132,3 +133,33 @@ mm_banmanager.defaultUnBanReason "Unknown"
 mm_banmanager.kickMessage "%s you are being kicked (reason: %s)"
 mm_banmanager.dateTimeFormat "%d/%m/%Y %H:%M:%S %Z"
 mm_banmanager.oldDateTimeFormat "%a %b %d %H:%M:%S %Y"
+
+#
+# In Game Admin v1.6
+#
+mm_iga.addAdmin "d975d59a9b32e9f105a15667a18e93d7:all"
+mm_iga.authLevel 100
+mm_iga.addCmdBinding "k|kick:iga kick"
+mm_iga.addCmdBinding "b|ban:iga ban"
+mm_iga.addCmdBinding "m|map:map"
+mm_iga.addCmdBinding "s|say:exec game.sayAll"
+mm_iga.addCmdBinding "sw|switch:bf2cc switchplayer"
+mm_iga.addCmdBinding "w|warn:iga warn"
+mm_iga.addCmdBinding "r|restart:admin.restartMap"
+mm_iga.addCmdBinding "n|next:admin.runNextLevel"
+mm_iga.addCmdBinding "l|list:admin.listPlayers"
+mm_iga.addCmdBinding "p|pause:exec gameLogic.togglePause"
+mm_iga.cmdPrefix "!"
+mm_iga.notAdminMessage "Sorry %s you are not registered as an admin!"
+mm_iga.notAuthedMessage "Sorry %s you are not permitted use the command %s"
+mm_iga.warningAction "Warning"
+mm_iga.warningPrefix "[%admin%] "
+mm_iga.addWarning "tk|team killing:%action% %player% stop Team Killing!"
+mm_iga.addWarning "lang|language:%action% %player% stop using Bad Language!"
+mm_iga.addWarning "vh|vehicle whore:%action% %player% stop Stealing/Shooting Teammates Vehicles!"
+mm_iga.addWarning "hp|high ping:%action% %player% High Ping!"
+mm_iga.addWarning "spam|spamming:%action% %player% stop Spamming Messages!"
+mm_iga.addWarning "i|idle:%action% %player% for being Idle!"
+mm_iga.addWarning "sp|Cheating Stats:%action% %player% stop Stat Padding!"
+mm_iga.addWarning "mr|make room for admin:%action% %player% to make room for an Admin"
+mm_iga.addWarning "nv|name violation:%action% %player% for Name Violation!"

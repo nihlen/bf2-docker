@@ -9,8 +9,8 @@ DEST="$VOLUME/srv/"
 # Start nginx
 service nginx start
 
-# Switch to the BF2 user
-su - bf2
+# Switch to the BF2 user (doesn't work)
+#su - bf2
 
 # Move from temp to persisted folder (symlink instead?)
 if [ "$(ls -A $DEST)" ]; then
@@ -31,6 +31,10 @@ else
     # Replace demo config file
     echo "Replacing demo config file..."
     mv "$TMP/rotate_demo.cfg" "$DEST/"
+
+    # Replace demo rotate script
+    echo "Replacing demo rotate script..."
+    mv "$TMP/rotate_demo.py" "$DEST/adminutils/demo/"
 
     # Delete our tmp directory
     echo "Deleting tmp directory..."
