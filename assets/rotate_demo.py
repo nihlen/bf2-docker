@@ -78,14 +78,14 @@ if options['use_ftp'] == '0':
 	ensure_exists(options['target_root'])
 	ensure_exists(os.path.join(options['target_root'], 'demos'))
 
-    # don't move if path and target are the same
-    if os.path.abspath(os.path.dirname(path)) != os.path.abspath(target_demo_dir):
-        try:
-            # NOTE: this requires atleast Python 2.3
-            print "moving '%s' to '%s'" % (path, target_demo_dir)
-            shutil.move(path, target_demo_dir)
-        except IOError:
-            sys.exit(1)
+	# don't move if path and target are the same
+	if os.path.abspath(os.path.dirname(path)) != os.path.abspath(target_demo_dir):
+		try:
+			# NOTE: this requires atleast Python 2.3
+			print "moving '%s' to '%s'" % (path, target_demo_dir)
+			shutil.move(path, target_demo_dir)
+		except IOError:
+			sys.exit(1)
 
 	timestamped = []
 
@@ -93,7 +93,7 @@ if options['use_ftp'] == '0':
 	for pf in filter(lambda x: x.endswith('.bf2demo'), os.listdir(target_demo_dir)):
 		try:
 			ppath = os.path.join(target_demo_dir, pf)
-            os.chmod(ppath, 0644) # make web-readable
+			os.chmod(ppath, 0644) # make web-readable
 			timestamped.append((os.stat(ppath).st_mtime, ppath))
 		except IOError:
 			pass # don't let I/O errors stop us
