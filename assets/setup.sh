@@ -49,7 +49,7 @@ chmod +x ./extract
 tar -xvf $BF2HUB_TGZ -C "$TMP/srv"
 
 # Move ModManager files into server directory
-tar -xvf $MODMANAGER_ZIP -C "$TMP/srv"
+unzip $MODMANAGER_ZIP -d "$TMP/srv"
 
 # Create demos web folder
 mkdir -p $DEMOS

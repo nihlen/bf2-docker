@@ -6,6 +6,12 @@ VOLUME='/home/bf2'
 SRC="$TMP/srv/"
 DEST="$VOLUME/srv/"
 
+# Start nginx
+service nginx start
+
+# Switch to the BF2 user
+su - bf2
+
 # Move from temp to persisted folder (symlink instead?)
 if [ "$(ls -A $DEST)" ]; then
     echo "$DEST is not empty"
@@ -40,9 +46,6 @@ chmod +x ./bin/amd-64/bf2
 chmod +x ./bin/amd-64/libbf2hub.so
 chmod +x ./bin/ia-32/bf2
 chmod +x ./bin/ia-32/libbf2hub.so
-
-# Start nginx
-service nginx start
 
 # Start Battlefield 2 server
 echo "Starting Battlefield 2 server..."
