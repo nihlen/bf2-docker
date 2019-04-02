@@ -6,6 +6,10 @@ VOLUME='/home/bf2'
 SRC="$TMP/srv/"
 DEST="$VOLUME/srv/"
 
+# Replace nginx settings
+echo "Replacing nginx settings..."
+mv "$TMP/default" '/etc/nginx/sites-available/'
+
 # Start nginx
 service nginx start
 
