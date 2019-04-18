@@ -19,5 +19,5 @@ COPY ./assets ./
 # Extract server files
 RUN bash -x ./setup.sh
 
-#USER bf2
+# Move server files to persisted folder and start server
 CMD ./start.sh
