@@ -12,12 +12,12 @@ RUN apt -y update && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --create-home --shell /bin/bash bf2
 
-# Add BF2 server installer to image
+# Add assets to image
 WORKDIR /home/bf2/tmp
 COPY ./assets ./
 
 # Extract server files
 RUN bash -x ./setup.sh
 
-#USER bf2
+# Move server files to persisted folder and start server
 CMD ./start.sh

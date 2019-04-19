@@ -1,0 +1,3 @@
+ftp://ftp.bf-games.net/server-files/bf2/bf2-linuxded-1.5.3153.0-installer.tgz
+https://www.bf2hub.com/downloads/BF2Hub-Unranked-Linux-R3.tar.gz
+http://blog.multiplay.co.uk/dropzone/ModManager-v2.2c.zip
