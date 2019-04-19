@@ -44,6 +44,7 @@ service nginx start
 
 # Start BF2CC Daemon
 echo 'Starting BF2CC Daemon...'
+export TERM=xterm
 su -c "cd $VOLUME && /opt/mono-1.1.12.1/bin/mono ./bf2ccd.exe -noquitprompts -autostart >/dev/null" - bf2
 
 exit 0
