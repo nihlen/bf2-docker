@@ -1,0 +1,120 @@
+<?xml version="1.0" standalone="yes"?>
+<Profile>
+  <ServerInfo>
+    <ServerInfoID>1</ServerInfoID>
+    <GameIP>0.0.0.0</GameIP>
+    <GamePort>16567</GamePort>
+    <GamespyPort>29900</GamespyPort>
+    <RCONIP>0.0.0.0</RCONIP>
+    <RCONPort>4711</RCONPort>
+    <IsInternet>true</IsInternet>
+    <AllowNATNegotiate>false</AllowNATNegotiate>
+    <PunkbusterEnabled>true</PunkbusterEnabled>
+    <RCONPassword>{{pw}}</RCONPassword>
+  </ServerInfo>
+  <GameInfo>
+    <GameInfoID>1</GameInfoID>
+    <ServerName>bf2-docker</ServerName>
+    <ServerPassword />
+    <AllowFreeCam>true</AllowFreeCam>
+    <AllowExternalViews>true</AllowExternalViews>
+    <AllowNoseCam>true</AllowNoseCam>
+    <ShowHitIndicator>true</ShowHitIndicator>
+    <DeathCamType>0</DeathCamType>
+    <MaxPlayers>64</MaxPlayers>
+    <PlayersToStart>2</PlayersToStart>
+    <StartDelay>15</StartDelay>
+    <EndDelay>15</EndDelay>
+    <SpawnTime>15</SpawnTime>
+    <ManDownTime>15</ManDownTime>
+    <TicketRatio>100</TicketRatio>
+    <RoundsPerMap>3</RoundsPerMap>
+    <TimeLimit>0</TimeLimit>
+    <ScoreLimit>0</ScoreLimit>
+    <SoldierFF>100</SoldierFF>
+    <VehicleFF>100</VehicleFF>
+    <SoldierFFSplash>100</SoldierFFSplash>
+    <VehicleFFSplash>100</VehicleFFSplash>
+    <TKPunishEnabled>false</TKPunishEnabled>
+    <TKsToKick>0</TKsToKick>
+    <TKPunishByDefault>false</TKPunishByDefault>
+    <VotingEnabled>true</VotingEnabled>
+    <VoteTime>90</VoteTime>
+    <MinPlayersVote>2</MinPlayersVote>
+    <RestartMapDelay>30</RestartMapDelay>
+    <AutoBalanceEnabled>false</AutoBalanceEnabled>
+    <TeamRatioPercent>100</TeamRatioPercent>
+    <AutoRecordDemo>true</AutoRecordDemo>
+    <DemoIndexURL>http://</DemoIndexURL>
+    <DemoDownloadURL>http://</DemoDownloadURL>
+    <AutoDemoHook>adminutils/demo/rotate_demo.py</AutoDemoHook>
+    <AdminScript>modmanager</AdminScript>
+    <SponsorText />
+    <SponsorLogoURL />
+    <WelcomeMessage />
+    <BandwidthChoke>0</BandwidthChoke>
+    <EndOfRoundDelay>15</EndOfRoundDelay>
+    <CommunityLogoURL />
+    <NotEnoughPlayersRestartDelay>15</NotEnoughPlayersRestartDelay>
+    <UseGlobalRank>true</UseGlobalRank>
+    <UseGlobalUnlocks>true</UseGlobalUnlocks>
+    <RadioSpamInterval>6</RadioSpamInterval>
+    <RadioMaxSpamFlagCount>6</RadioMaxSpamFlagCount>
+    <RadioBlockedDurationTime>30</RadioBlockedDurationTime>
+    <DemoQuality>10</DemoQuality>
+    <Ranked>true</Ranked>
+    <ReservedSlots>0</ReservedSlots>
+    <Mod>bf2</Mod>
+    <MinesFF>0</MinesFF>
+    <ShowTKPunishAnnouncements>2</ShowTKPunishAnnouncements>
+    <CustomCommands />
+    <CoopBotCount>16</CoopBotCount>
+    <CoopBotRatio>50</CoopBotRatio>
+    <CoopBotDifficulty>50</CoopBotDifficulty>
+    <VotingEnableTeamOnly>false</VotingEnableTeamOnly>
+    <InfantryOnly>false</InfantryOnly>
+  </GameInfo>
+  <ScoreInfo>
+    <ScoreInfoID>1</ScoreInfoID>
+    <Death>0</Death>
+    <Kill>2</Kill>
+    <AssistKill>1</AssistKill>
+    <InDirectKill>1</InDirectKill>
+    <Tk>-4</Tk>
+    <Heal>1</Heal>
+    <SoldierRevive>2</SoldierRevive>
+    <Repair>1</Repair>
+    <VehicleRevive>2</VehicleRevive>
+    <Ammo>1</Ammo>
+    <FlagCapture>5</FlagCapture>
+    <FlagReturn>2</FlagReturn>
+    <ControlPointCapture>4</ControlPointCapture>
+    <Objective>5</Objective>
+    <DriverPassenger>1</DriverPassenger>
+    <TeamDamage>-1</TeamDamage>
+    <TeamVehicleDamage>-2</TeamVehicleDamage>
+    <HealScoreLimit>100</HealScoreLimit>
+    <RepairScoreLimit>100</RepairScoreLimit>
+    <AmmoScoreLimit>100</AmmoScoreLimit>
+    <TeamDamageLimit>50</TeamDamageLimit>
+    <TeamVehicleDamageLimit>25</TeamVehicleDamageLimit>
+  </ScoreInfo>
+  <RunningMaps>
+    <RunningMapID>1</RunningMapID>
+    <Order>1</Order>
+    <MapName>strike_at_karkand</MapName>
+    <GameMode>gpm_cq</GameMode>
+    <MaxPlayers>32</MaxPlayers>
+  </RunningMaps>
+  <VOIPInfo>
+    <VOIPInfoID>1</VOIPInfoID>
+    <IsRemote>false</IsRemote>
+    <ServerRemoteIP />
+    <ServerPort>55125</ServerPort>
+    <BFClientPort>55123</BFClientPort>
+    <BFServerPort>55124</BFServerPort>
+    <SharedPassword />
+    <Quality>3</Quality>
+    <IsEnabled>true</IsEnabled>
+  </VOIPInfo>
+</Profile>

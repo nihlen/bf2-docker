@@ -5,9 +5,10 @@ LABEL maintainer=nihlen
 ENV SERVER_NAME="bf2-docker"
 
 # Get required packages and create our user
-RUN apt -y update && \
+RUN dpkg --add-architecture i386 && \
+    apt -y update && \
     apt-get -y update && \
-    apt-get -y install wget expect libncurses5 nginx unzip python && \
+    apt-get -y install wget expect libncurses5 nginx unzip python libglib2.0-0:i386 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --create-home --shell /bin/bash bf2

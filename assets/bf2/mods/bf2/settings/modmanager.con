@@ -83,10 +83,10 @@ mm_rcon.lingerFor 1
 mm_rcon.logCommands 0
 mm_rcon.loginMessage ""
 mm_rcon.logoutMessage ""
-mm_rcon.rconBasicPassword "YourBasicPw"
+mm_rcon.rconBasicPassword "{{pw}}"
 mm_rcon.rconIp "0.0.0.0"
 mm_rcon.rconListenQueue 1
-mm_rcon.rconPassword "YourRconPw"
+mm_rcon.rconPassword "{{pw}}"
 mm_rcon.rconPort 4711
 mm_rcon.reuseAddress 1
 mm_rcon.superAuthLevel 100

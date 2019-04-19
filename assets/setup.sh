@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 VOLUME='/home/bf2/srv'
 DEMOS='/var/www/html/demos'
@@ -17,44 +18,32 @@ MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
 MODMANAGER_URL='http://blog.multiplay.co.uk/dropzone/ModManager-v2.2c.zip'
 MODMANAGER_SHA512='d025aff1a6713da0381b8844f64cd016a66ab907bc936e74ca31ef0781424c02597116c322044da46877766318f28c4c4822e5c4bdec1c19a90157c39fe5bbb4'
 
-# Verify that we have the required server files
-if [[ ! -e $INSTALLER_TGZ ]]; then
-    echo 'Downloading BF2 Dedicated Server 1.5.3153-802.0...'
-    wget $INSTALLER_URL -O $INSTALLER_TGZ
+MONOINSTALLER="$TMP/mono-1.1.12.1_0-installer.bin"
+MONOINSTALLER_URL='https://download.mono-project.com/archive/1.1.12.1/linux-installer/0/mono-1.1.12.1_0-installer.bin'
+MONOINSTALLER_SHA512='c9557048a70e4bbd28a51fa55ce58a87cf652f03329d792621eb22d45dcc9f3f2301cbab0e27944c265ccdd9b8a45d818e1f4dc469c31d5f6fc3df1bbc54cec1'
 
-    # Validate checksum
-    SHA512=($(sha512sum $INSTALLER_TGZ))
-    if [[ $SHA512 != $INSTALLER_SHA512 ]]; then
-        echo 'Downloaded installer checksum mismatch. Exiting.';
-        exit 1;
+BF2CCD_ZIP="$TMP/BF2CCD_1.4.2446.zip"
+BF2CCD_URL='https://www.fullcontactwar.com/files/BF2CCD_1.4.2446.zip'
+BF2CCD_SHA512='ee734acba5f3f0fddf3e10e448d03af9de03713425c8844ae31b534eca3904c21abd413d105e7039fde5bd0f855971997ad61caf67fde6156e9b212e426b99d1'
+
+download_and_verify() {
+    if [[ ! -e $1 ]]; then
+        echo "Downloading $2..."
+        wget $2 -O $1
+
+        # Validate checksum
+        if [[ $3 != $(sha512sum $1) ]]; then
+            echo 'Downloaded file checksum mismatch. Exiting.';
+            exit 1;
+        fi
     fi
-fi
+}
 
-# Verify that we have the BF2Hub files required for online
-if [[ ! -e $BF2HUB_TGZ ]]; then
-    echo 'Downloading BF2Hub Unranked Linux R3...'
-    wget $BF2HUB_URL -O $BF2HUB_TGZ
-
-    # Validate checksum
-    SHA512=($(sha512sum $BF2HUB_TGZ))
-    if [[ $SHA512 != $BF2HUB_SHA512 ]]; then
-        echo 'Downloaded BF2Hub checksum mismatch. Exiting.';
-        exit 1;
-    fi
-fi
-
-# Verify that we have the ModManager files
-if [[ ! -e $MODMANAGER_ZIP ]]; then
-    echo 'Downloading ModManager v2.2c...'
-    wget $MODMANAGER_URL -O $MODMANAGER_ZIP
-
-    # Validate checksum
-    SHA512=($(sha512sum $MODMANAGER_ZIP))
-    if [[ $SHA512 != $MODMANAGER_SHA512 ]]; then
-        echo 'Downloaded ModManager checksum mismatch. Exiting.';
-        exit 1;
-    fi
-fi
+download_and_verify $INSTALLER_TGZ $INSTALLER_URL $INSTALLER_SHA512
+download_and_verify $BF2HUB_TGZ $BF2HUB_URL $BF2HUB_SHA512
+download_and_verify $MODMANAGER_ZIP $MODMANAGER_URL $MODMANAGER_SHA512
+download_and_verify $MONOINSTALLER $MONOINSTALLER_URL $MONOINSTALLER_SHA512
+download_and_verify $BF2CCD_ZIP $BF2CCD_URL $BF2CCD_SHA512
 
 # Extract server files from the installer
 tar -xvf $INSTALLER_TGZ -C $TMP
@@ -67,6 +56,13 @@ tar -xvf $BF2HUB_TGZ -C "$TMP/srv"
 
 # Move ModManager files into server directory
 unzip $MODMANAGER_ZIP -d "$TMP/srv"
+
+# Install Mono
+chmod +x $MONOINSTALLER
+$MONOINSTALLER
+
+# Move BF2CC Daemon into server directory
+unzip $BF2CCD_ZIP -d "$TMP/srv"
 
 # Replace with our own BF2 server files (custom settings and scripts)
 cp -r "$TMP/bf2/." "$TMP/srv"
