@@ -23,8 +23,7 @@ else
     # Set permissions
     echo 'Setting execute permissions...'
     cd $VOLUME
-    chmod +x ./start_bf2hub.sh
-    chmod +x ./bin/amd-64/bf2
+    chmod +x ./start_bf2hub.sh ./bin/amd-64/bf2
 
     # Set RCON password
     rcon_pw="$(generate_pw)"

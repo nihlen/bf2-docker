@@ -13,7 +13,7 @@ RUN dpkg --add-architecture i386 && \
     rm -rf /var/lib/apt/lists/* && \
     useradd --create-home --shell /bin/bash bf2
 
-# Add BF2 server installer to image
+# Add assets to image
 WORKDIR /home/bf2/tmp
 COPY ./assets ./
 
