@@ -32,7 +32,8 @@ download_and_verify() {
         wget $2 -O $1
 
         # Validate checksum
-        if [[ $3 != $(sha512sum $1) ]]; then
+        local sha512=($(sha512sum $1))
+        if [[ $3 != $sha512 ]]; then
             echo 'Downloaded file checksum mismatch. Exiting.';
             exit 1;
         fi
