@@ -25,8 +25,8 @@ sv.soldierFriendlyFire 100
 sv.vehicleFriendlyFire 100
 sv.soldierSplashFriendlyFire 100
 sv.vehicleSplashFriendlyFire 100
-sv.tkPunishEnabled 1
-sv.tkNumPunishToKick 3
+sv.tkPunishEnabled 0
+sv.tkNumPunishToKick 0
 sv.tkPunishByDefault 0
 sv.votingEnabled 1
 sv.voteTime 90
@@ -39,7 +39,7 @@ sv.autoRecord 0
 sv.demoIndexURL http://
 sv.demoDownloadURL http://
 sv.autoDemoHook "adminutils/demo/rotate_demo.py"
-sv.demoQuality 1
+sv.demoQuality 10
 sv.adminScript "default"
 sv.timeBeforeRestartMap 30
 sv.autoBalanceTeam 0

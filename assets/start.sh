@@ -1,39 +1,26 @@
 #!/bin/sh
+set -e
 
 TMP='/home/bf2/tmp'
-VOLUME='/home/bf2'
+VOLUME='/home/bf2/srv'
 
-SRC="$TMP/srv/"
-DEST="$VOLUME/srv/"
-
-# Move from temp to persisted folder (symlink instead?)
-if [ "$(ls -A $DEST)" ]; then
-    echo "$DEST is not empty"
+# Check if target volume is empty
+if [ "$(ls -A $VOLUME)" ]; then
+    echo "$VOLUME is not empty. Skipping..."
 else
-    # Move server files (-n without overwriting)
-    echo "$DEST is empty. Moving server files..."
-    mv -n $SRC* $DEST
+    # Move server files to persisted folder (-n without overwriting)
+    echo "$VOLUME is empty. Moving server files..."
+    mv -n $TMP/srv/* $VOLUME/
 
-    # Overwrite settings file
-    echo "Overwriting settings file..."
-    mv "$TMP/serversettings.con" "$DEST/mods/bf2/settings/"
-
-    # Delete our tmp directory
-    echo "Deleting tmp directory..."
-    rm -rf $SRC
+    # Set permissions
+    echo 'Setting execute permissions...'
+    cd $VOLUME
+    chmod +x ./start_bf2hub.sh ./bin/amd-64/bf2
 fi
-
-# Set permissions
-echo "Setting execute permissions..."
-cd $DEST
-chmod +x ./start.sh
-chmod +x ./start_bf2hub.sh
-chmod +x ./bin/amd-64/bf2
-chmod +x ./bin/amd-64/libbf2hub.so
-chmod +x ./bin/ia-32/bf2
-chmod +x ./bin/ia-32/libbf2hub.so
 
 # Start Battlefield 2 server
 echo "Starting Battlefield 2 server..."
 export TERM=xterm
-./start_bf2hub.sh >> log.txt
+su -c "cd $VOLUME && ./start_bf2hub.sh >/dev/null" - bf2
+
+exit 0
