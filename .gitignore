@@ -1,5 +1,6 @@
-assets/bf2-linuxded-*.*
-assets/BF2Hub-Unranked-Linux-*.tar.gz
-assets/ModManager-*.zip
-assets/mono-*-installer.bin
-assets/BF2CCD_*.zip
+**/bf2-linuxded-*.*
+**/BF2Hub-Unranked-Linux-*.tar.gz
+**/ModManager-*.zip
+**/mono-*-installer.bin
+**/BF2CCD_*.zip
+**/bf2/levels

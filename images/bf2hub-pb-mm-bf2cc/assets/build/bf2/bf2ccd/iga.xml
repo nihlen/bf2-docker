@@ -1,0 +1,31 @@
+<?xml version="1.0" standalone="yes"?>
+<dsdIGA xmlns="http://tempuri.org/dsdIGA.xsd">
+  <Aliases>
+    <Alias>tk</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; for Team Killing!</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>language</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; Please Watch Your Language!</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>vwhore</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; for Stealing/Shooting Teammates Vehicles!</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>spam</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; Stop Spamming Messages!</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>padding</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; for CHEATING --&gt; Padding Stats</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>member</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; to make room for an Admin/Member</Message>
+  </Aliases>
+  <Aliases>
+    <Alias>smack</Alias>
+    <Message>&lt;Action&gt; &lt;Player&gt; for being a SMACKTARD! Knock it OFF!</Message>
+  </Aliases>
+</dsdIGA>

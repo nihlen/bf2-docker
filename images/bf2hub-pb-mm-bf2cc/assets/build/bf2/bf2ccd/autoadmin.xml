@@ -1,0 +1,27 @@
+<?xml version="1.0" standalone="yes"?>
+<dsdAA xmlns="http://tempuri.org/dsdAA.xsd">
+  <AutoAdmin>
+    <AutoAdminID>1</AutoAdminID>
+    <HighPingEnabled>false</HighPingEnabled>
+    <HighPingThreshold>350</HighPingThreshold>
+    <HighPingWarnings>true</HighPingWarnings>
+    <SmartBalanceEnabled>false</SmartBalanceEnabled>
+    <SmartBalanceThreshold>2</SmartBalanceThreshold>
+    <EORTeamSwap>false</EORTeamSwap>
+    <IdleKickEnabled>false</IdleKickEnabled>
+    <IdleKickMinutes>5</IdleKickMinutes>
+    <LanguageFilterEnabled>true</LanguageFilterEnabled>
+    <LanguageFilterWarns>1</LanguageFilterWarns>
+    <LanguageFilterKicks>1</LanguageFilterKicks>
+    <LanguageFilterWords></LanguageFilterWords>
+    <AutoMessagesEnabled>false</AutoMessagesEnabled>
+    <SmartBalanceClanTags>YourClanTag1,YourClanTag2</SmartBalanceClanTags>
+    <UseAADelay>false</UseAADelay>
+    <TKPunishEnabled>false</TKPunishEnabled>
+    <TKsBeforeKick>0</TKsBeforeKick>
+    <TKsBeforeBan>0</TKsBeforeBan>
+    <NegativeScoreKickEnabled>false</NegativeScoreKickEnabled>
+    <NegativeScoreKickThreshold>-10</NegativeScoreKickThreshold>
+    <RandomizeTeams>false</RandomizeTeams>
+  </AutoAdmin>
+</dsdAA>

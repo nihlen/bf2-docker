@@ -1,0 +1,5 @@
+ftp://ftp.bf-games.net/server-files/bf2/bf2-linuxded-1.5.3153.0-installer.tgz
+https://www.bf2hub.com/downloads/BF2Hub-Unranked-Linux-R3.tar.gz
+https://static.nihlen.net/bf2/server/ModManager-v2.2c.zip
+https://download.mono-project.com/archive/1.1.12.1/linux-installer/0/mono-1.1.12.1_0-installer.bin
+https://www.fullcontactwar.com/files/BF2CCD_1.4.2446.zip

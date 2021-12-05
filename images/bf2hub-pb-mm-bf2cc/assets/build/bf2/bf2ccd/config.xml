@@ -1,0 +1,18 @@
+<?xml version="1.0" standalone="yes"?>
+<dsdDaemonInfo xmlns="http://bf2cc.com/dsdDaemonInfo.xsd">
+  <DaemonInfo>
+    <DaemonInfoID>1</DaemonInfoID>
+    <GameFolder>/home/bf2/srv/</GameFolder>
+    <GameExec>start_bf2hub.sh</GameExec>
+    <GameExecArgs />
+    <AutoRestart>true</AutoRestart>
+    <StartupProfile>default</StartupProfile>
+    <DaemonIP>0.0.0.0</DaemonIP>
+    <DaemonPort>4712</DaemonPort>
+    <ModName>bf2</ModName>
+    <NetSettingsLocked>false</NetSettingsLocked>
+    <DemoRecordingLocked>false</DemoRecordingLocked>
+    <PlayerLimit>64</PlayerLimit>
+    <DaemonArgsPassed>-noquitprompts -autostart</DaemonArgsPassed>
+  </DaemonInfo>
+</dsdDaemonInfo>
