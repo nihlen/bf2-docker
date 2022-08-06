@@ -1,0 +1,174 @@
+#
+# Multiplay, ModManager
+#
+modmanager.autoSave 1
+modmanager.banManagerModule "mm_banmanager"
+modmanager.debugEnable 0
+modmanager.debugFile "modmanager_debug.log"
+modmanager.homeGuess "C:/Documents and Settings/Administrator/My Documents/Battlefield 2/"
+modmanager.logAppend 0
+modmanager.logAutoFlush 1
+modmanager.logDateFormat "[%Y-%m-%d %H:%M:%S] "
+modmanager.logLevel 2
+modmanager.logModule "mm_logger"
+modmanager.moduleBase "modules"
+modmanager.rconModule "mm_rcon"
+
+# Modules
+#modmanager.loadModule "mm_tk_punish"
+#modmanager.loadModule "mm_kicker"
+#modmanager.loadModule "mm_announcer"
+modmanager.loadModule "mm_bf2cc"
+modmanager.loadModule "mm_autobalance"
+#modmanager.loadModule "mm_reserver"
+modmanager.loadModule "mm_iga"
+
+#
+# ModManager Announcer
+#
+#mm_announcer.addTimedMessage "30:300:Server Rules: No team killing, no stats padding, keep the teams balanced and play fair!"
+
+#
+# ModManager Team autobalance
+#
+mm_autobalance.allowCommander 0
+mm_autobalance.allowSquadLeader 0
+mm_autobalance.allowSquadMember 0
+mm_autobalance.roundSwitch 1
+
+#
+# BF2CC for ModManager
+#
+mm_bf2cc.chatBufferSize 50
+mm_bf2cc.serverChatFormat "[Admin: %s] %s"
+
+#
+# ModManager Logger
+#
+mm_logger.logAppend 0
+mm_logger.logAutoFlush 1
+mm_logger.logFilename "modmanager.log"
+
+#
+# ModManager Player Kicker
+#
+mm_kicker.banLimit 1
+mm_kicker.banPeriod "Round"
+mm_kicker.banWordReason "Using bad / racist language"
+mm_kicker.enableChatChecks 0
+mm_kicker.idleIgnoreNotStarted 1
+mm_kicker.idleLimit 0
+mm_kicker.initDelay 60
+mm_kicker.kickDelay 5
+mm_kicker.kickLimit 3
+mm_kicker.kickMessage "Sorry '%s' your are being kicked ( %s )"
+mm_kicker.kickType 1
+mm_kicker.kickWordReason "Using bad / racist language"
+mm_kicker.maxPing 0
+mm_kicker.minPing 0
+mm_kicker.negScoreKick 0
+mm_kicker.pingLimit 0
+mm_kicker.positionDelay 120
+mm_kicker.samplePeriod 120
+mm_kicker.sampleRate 120
+mm_kicker.warnWordMessage "WARNING: Please refrain from using bad / racist language on this server '%s'"
+mm_kicker.chatSpamLimit 100
+mm_kicker.chatSpamPeriod 1
+
+#
+# ModManager Rcon
+#
+mm_rcon.allowBatching 1
+mm_rcon.basicAuthLevel 50
+mm_rcon.enableLinger 0
+mm_rcon.lingerFor 1
+mm_rcon.logCommands 0
+mm_rcon.loginMessage ""
+mm_rcon.logoutMessage ""
+mm_rcon.rconBasicPassword "{{rcon_password}}"
+mm_rcon.rconIp "0.0.0.0"
+mm_rcon.rconListenQueue 1
+mm_rcon.rconPassword "{{rcon_password}}"
+mm_rcon.rconPort 4711
+mm_rcon.reuseAddress 1
+mm_rcon.superAuthLevel 100
+mm_rcon.defaultGametype "gpm_cq"
+mm_rcon.advancedMapSizeValidation 0
+
+#
+# ModManager Reserver
+#
+mm_reserver.kickDelay 5
+mm_reserver.kickReason "Reserved slots reached"
+mm_reserver.kickMode 2
+mm_reserver.kickType 1
+mm_reserver.privatePassword ""
+mm_reserver.reservedSlots 1
+
+#
+# ModManager Team kill punisher
+#
+mm_tk_punish.announcePunishments 1
+mm_tk_punish.banMessageDelay 5
+mm_tk_punish.bannedBy "ModManager Team Kill Punisher"
+mm_tk_punish.banPeriod "Round"
+mm_tk_punish.banReason "Team killing"
+mm_tk_punish.forgiveMessage "TKPUNISH: %s forgives %s for a teamkill (%s has %d punishes and %d forgives)"
+mm_tk_punish.punishMessage "TKPUNISH: %s punishes %s for a teamkill (%s has %d punishes and %d forgives)"
+mm_tk_punish.punishTime 20
+
+#
+# ModManager BanManager
+#
+mm_banmanager.banFilename "mm_bans.xml"
+mm_banmanager.banMessage "%s you are being banned (reason: %s)"
+mm_banmanager.defaultBanAddress "N/A"
+mm_banmanager.defaultBanCdKeyHash "N/A"
+mm_banmanager.defaultBanDelay 5
+mm_banmanager.defaultBanMethod "Key"
+mm_banmanager.defaultBanNick "N/A"
+mm_banmanager.defaultBanPeriod "Perm"
+mm_banmanager.defaultBanReason "Unknown"
+mm_banmanager.defaultKickDelay 5
+mm_banmanager.defaultKickReason "Unknown"
+mm_banmanager.defaultUnBanReason "Unknown"
+mm_banmanager.kickMessage "%s you are being kicked (reason: %s)"
+mm_banmanager.dateTimeFormat "%d/%m/%Y %H:%M:%S %Z"
+mm_banmanager.oldDateTimeFormat "%a %b %d %H:%M:%S %Y"
+
+#
+# In Game Admin v1.6
+#
+mm_iga.addAdmin "d975d59a9b32e9f105a15667a18e93d7:all"
+mm_iga.authLevel 100
+mm_iga.addCmdBinding "k|kick:iga kick"
+mm_iga.addCmdBinding "b|ban:iga ban"
+mm_iga.addCmdBinding "m|map:map"
+mm_iga.addCmdBinding "s|say:exec game.sayAll"
+mm_iga.addCmdBinding "sw|switch:bf2cc switchplayer"
+mm_iga.addCmdBinding "w|warn:iga warn"
+mm_iga.addCmdBinding "r|restart:admin.restartMap"
+mm_iga.addCmdBinding "n|next:admin.runNextLevel"
+mm_iga.addCmdBinding "l|list:admin.listPlayers"
+mm_iga.addCmdBinding "p|pause:exec gameLogic.togglePause"
+mm_iga.cmdPrefix "!"
+mm_iga.notAdminMessage "Sorry %s you are not registered as an admin!"
+mm_iga.notAuthedMessage "Sorry %s you are not permitted use the command %s"
+mm_iga.warningAction "Warning"
+mm_iga.warningPrefix "[%admin%] "
+mm_iga.addWarning "tk|team killing:%action% %player% stop Team Killing!"
+mm_iga.addWarning "lang|language:%action% %player% stop using Bad Language!"
+mm_iga.addWarning "vh|vehicle whore:%action% %player% stop Stealing/Shooting Teammates Vehicles!"
+mm_iga.addWarning "hp|high ping:%action% %player% High Ping!"
+mm_iga.addWarning "spam|spamming:%action% %player% stop Spamming Messages!"
+mm_iga.addWarning "i|idle:%action% %player% for being Idle!"
+mm_iga.addWarning "sp|Cheating Stats:%action% %player% stop Stat Padding!"
+mm_iga.addWarning "mr|make room for admin:%action% %player% to make room for an Admin"
+mm_iga.addWarning "nv|name violation:%action% %player% for Name Violation!"
+
+#
+# Web Admin
+#
+mm_webadmin.serverHost "{{bf2wa_host}}"
+mm_webadmin.serverPort {{bf2wa_port}}
+mm_webadmin.timerInterval {{bf2wa_timer_interval}}

@@ -1,0 +1,33 @@
+# Default nginx server configuration
+#
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    # root /var/www/html;
+    root /volume/www;
+
+    # Add index.php to the list if you are using PHP
+    index index.html index.htm index.nginx-debian.html index.php;
+
+    server_name _;
+
+    location /demos/ {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        alias /volume/demos/uploaded/;
+        try_files $uri $uri/ =404;
+        autoindex on;
+        autoindex_format json;
+    }
+
+    location ~ ([^\/]+\.bf2demo)$ {
+        alias /volume/demos/uploaded/$1;
+    }
+
+    location ~ \.php$ {	
+        alias /volume/www/;
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+}
