@@ -22,6 +22,7 @@ modmanager.loadModule "mm_bf2cc"
 modmanager.loadModule "mm_autobalance"
 #modmanager.loadModule "mm_reserver"
 modmanager.loadModule "mm_iga"
+modmanager.loadModule "mm_webadmin"
 
 #
 # ModManager Announcer
