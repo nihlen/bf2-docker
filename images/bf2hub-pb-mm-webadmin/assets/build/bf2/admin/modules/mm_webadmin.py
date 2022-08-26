@@ -69,7 +69,8 @@ class WebAdmin(object):
 
         # Custom RCon Commands
         self.__cmds = {
-            'connect': {'method': self.cmdConnect, 'args': '<ip> <port>', 'level': 10}
+            'connect': {'method': self.cmdConnect, 'args': '<ip> <port>', 'level': 10},
+            'connectprivate': {'method': self.cmdConnectPrivate, 'args': '<port>', 'level': 10}
         }
 
         # Timers
@@ -90,6 +91,12 @@ class WebAdmin(object):
             self.closeSocket()
 
         try:
+            # If a docker container name or hostname is given then we need to resolve it to an IPv4 address first
+            if not self.valid_ipv4(self.__config['serverHost']):
+                resolvedIp = socket.gethostbyname(self.__config['serverHost'])
+                self.mm.info("Resolved host name %s to %s" % (self.__config['serverHost'], resolvedIp))
+                self.__config['serverHost'] = resolvedIp
+
             self.__socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.__socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.__socket.settimeout(5)
@@ -101,12 +108,12 @@ class WebAdmin(object):
             self.outbuffer = OutputBuffer(self.mm, self.__socket, True)  # outgoing buffer
             self.inbuffer = ''  # incoming buffer
 
-            self.mm.info("WebAdmin successfully connected to server socket")
+            self.mm.info("WebAdmin successfully connected to server socket %s:%s" % (self.__config['serverHost'], self.__config['serverPort']))
 
             self.onSocketConnected()
 
         except Exception, detail:
-            self.mm.error("WebAdmin failed to connect to server socket (%s)" % detail, False)
+            self.mm.error("WebAdmin failed to connect to server socket %s:%s (%s)" % (self.__config['serverHost'], self.__config['serverPort'], detail), False)
             self.__socket = None
 
     def closeSocket(self):
@@ -279,15 +286,47 @@ class WebAdmin(object):
         # Possible reconnection
         self.openSocket()
 
-        # Send data that the server missed, like player connections, vehicles and stats
-        self.sendReconnectMessage()
-
         if self.__socket:
-            ctx.write('Connected successfully.')
+            # Send data that the server missed, like player connections, vehicles and stats
+            self.sendReconnectMessage()
+            ctx.write('Connected successfully to %s:%s' % (ip, port))
         else:
-            ctx.write('Connection failed.')
+            ctx.write('Connection failed to %s:%s' % (ip, port))
 
         return 1
+
+    def cmdConnectPrivate(self, ctx, cmd):
+        global IS_DEBUG
+
+        ip = ctx.conn.addr[0]
+        port = cmd
+        self.__config['serverHost'] = ip
+        self.__config['serverPort'] = get_int(port)
+        IS_DEBUG = self.__config['serverHost'] == '127.0.0.1'
+
+        # Possible reconnection
+        self.openSocket()
+
+        if self.__socket:
+            # Send data that the server missed, like player connections, vehicles and stats
+            self.sendReconnectMessage()
+            ctx.write('Connected successfully to %s:%s' % (ip, port))
+        else:
+            ctx.write('Connection failed to %s:%s' % (ip, port))
+
+        return 1
+
+    def valid_ipv4(self, s):
+        a = s.split('.')
+        if len(a) != 4:
+            return False
+        for x in a:
+            if not x.isdigit():
+                return False
+            i = int(x)
+            if i < 0 or i > 255:
+                return False
+        return True
 
     def shutdown(self):
         """Shutdown and stop processing."""
