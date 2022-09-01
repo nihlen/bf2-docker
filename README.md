@@ -59,7 +59,7 @@ To simplify setting up multiple servers on the same host you can use Docker Comp
 
 Here is an example of running two servers on the same host:
 
-```
+```yaml
 version: "3.3"
 services:
   bf2-docker-1-service:
