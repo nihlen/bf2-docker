@@ -218,7 +218,7 @@ class WebAdmin(object):
             (playerid, medalnum, medalval) = mm_utils.largs(message[len("medal "):], None, 3, '')
             p = mm_utils.find_player(playerid)
             if p and medalnum and medalval:
-                awardPlayer(p, get_int(ranknum), get_int(rankevent))
+                awardPlayer(p, get_int(medalnum), get_int(medalval))
 
         # Send game event
         elif message.startswith("gameevent "):
