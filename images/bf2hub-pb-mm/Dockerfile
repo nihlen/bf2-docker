@@ -1,5 +1,5 @@
 # Build stage
-FROM debian:stretch-slim AS build
+FROM debian:stable-slim AS build
 
 # Add assets to image
 WORKDIR /home/bf2/tmp
@@ -9,7 +9,7 @@ COPY ./assets/build ./
 RUN bash -x ./build.sh
 
 # Runtime stage
-FROM debian:stretch-slim AS runtime
+FROM debian:stable-slim AS runtime
 WORKDIR /home/bf2/tmp
 LABEL maintainer=nihlen
 
