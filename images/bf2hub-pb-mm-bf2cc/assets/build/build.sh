@@ -18,7 +18,14 @@ apt-get -y update
 apt-get -y install wget expect unzip libglib2.0-0:i386
 
 # Download missing assets
-wget -nc -q --show-progress --progress=bar:force:noscroll -i assets.txt
+while IFS=" " read url filename
+do
+    args=(-nc -q --show-progress --progress=bar:force:noscroll)
+    if [ -n "$filename" ]; then
+        args+=(-O "$filename")
+    fi
+    wget "${args[@]}" "$url"
+done < assets.txt
 
 # Verify checksums
 if ! sha512sum -w -c assets.sha512; then
