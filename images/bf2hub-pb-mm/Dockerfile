@@ -1,5 +1,5 @@
 # Build stage
-FROM debian:stable-slim AS build
+FROM debian:bullseye-slim AS build
 
 # Add assets to image
 WORKDIR /home/bf2/tmp
@@ -9,7 +9,7 @@ COPY ./assets/build ./
 RUN bash -x ./build.sh
 
 # Runtime stage
-FROM debian:stable-slim AS runtime
+FROM debian:bullseye-slim AS runtime
 WORKDIR /home/bf2/tmp
 LABEL maintainer=nihlen
 
