@@ -73,7 +73,7 @@ fi
 
 # Start nginx and php
 service nginx start
-service php7.0-fpm start
+service php7.4-fpm start
 
 # Start Battlefield 2 server as the bf2 user
 echo "Starting Battlefield 2 server..."

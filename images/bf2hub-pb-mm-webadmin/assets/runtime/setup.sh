@@ -9,10 +9,10 @@ TMP='/home/bf2/tmp'
 # Get required packages and create our user
 # libncurses5 = run bf2
 # python = rotate_demo.py
-# nginx + php7.0-fpm = host demos and bf2tool.php logs
+# nginx + php7.4-fpm = host demos and bf2tool.php logs
 apt -y update
 apt-get -y update
-apt-get -y install libncurses5 python nginx php7.0-fpm
+apt-get -y install libncurses5 python nginx php7.4-fpm
 apt-get clean
 rm -rf /var/lib/apt/lists/*
 useradd --create-home --shell /bin/bash bf2
