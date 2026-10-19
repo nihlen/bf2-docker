@@ -1,0 +1,135 @@
+name: CI
+
+# Tests all images and builds, smoke tests and pushes the images that changed.
+# Images are pushed from the branches in PUSH_BRANCHES and from manual runs, never from pull requests:
+#   images/netsky-<name>  ->  $REGISTRY/$PROJECT/bf2-netsky:<name>
+#   images/<name>         ->  $REGISTRY/$PROJECT/bf2-docker:<name>
+#
+# Repository settings:
+#   secrets.CR_USERNAME, secrets.CR_PASSWORD  Container registry account with push access
+#   secrets.CR_ORIGIN_IP                      Optional origin IP of the registry, to push straight to it and bypass
+#                                             Cloudflare's 100 MB upload limit (the image layers are larger)
+#   vars.PUSH_BRANCHES                        Branches to push images from, separated by spaces (default: master)
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      images:
+        description: 'Images to build, separated by spaces, or "all"'
+        default: all
+      push:
+        description: Push the images to the container registry
+        type: boolean
+        default: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: cr.nihlen.net
+  PROJECT: library
+  CR_ORIGIN_IP: ${{ secrets.CR_ORIGIN_IP }}
+
+jobs:
+  static:
+    name: Static checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: tests/run.sh static
+
+  changes:
+    name: Find changed images
+    runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.images.outputs.images }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - id: images
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_IMAGES: ${{ inputs.images }}
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE: ${{ github.event.before }}
+        run: |
+          case "$EVENT" in
+            workflow_dispatch)
+              if [ "$INPUT_IMAGES" = 'all' ]; then
+                images=$(.github/scripts/changed-images.sh all)
+              else
+                read -ra list <<< "$INPUT_IMAGES"
+                images=$(printf '%s\n' "${list[@]}" | jq -R . | jq -sc .)
+              fi ;;
+            pull_request) images=$(.github/scripts/changed-images.sh "$PR_BASE") ;;
+            *) images=$(.github/scripts/changed-images.sh "$PUSH_BASE") ;;
+          esac
+          echo "Images: $images"
+          echo "images=$images" >> "$GITHUB_OUTPUT"
+
+  image:
+    name: ${{ matrix.image }}
+    needs: changes
+    if: needs.changes.outputs.images != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJSON(needs.changes.outputs.images) }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build test
+        run: tests/run.sh build ${{ matrix.image }}
+
+      - name: Smoke test
+        run: tests/run.sh smoke ${{ matrix.image }}
+
+      - name: Check if the image should be pushed
+        id: push
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_PUSH: ${{ inputs.push }}
+          BRANCH: ${{ github.ref_name }}
+          PUSH_BRANCHES: ${{ vars.PUSH_BRANCHES || 'master' }}
+        run: |
+          push=false
+          if [ "$EVENT" = 'workflow_dispatch' ]; then
+            push="$INPUT_PUSH"
+          elif [ "$EVENT" = 'push' ] && [[ " $PUSH_BRANCHES " == *" $BRANCH "* ]]; then
+            push=true
+          fi
+          echo "Push: $push"
+          echo "push=$push" >> "$GITHUB_OUTPUT"
+
+      # docker push runs in the host's dockerd, so the /etc/hosts entry applies to it
+      - name: Bypass Cloudflare for the registry
+        if: steps.push.outputs.push == 'true' && env.CR_ORIGIN_IP != ''
+        run: echo "${CR_ORIGIN_IP} ${REGISTRY}" | sudo tee -a /etc/hosts > /dev/null
+
+      - name: Log in to the container registry
+        if: steps.push.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.CR_USERNAME }}
+          password: ${{ secrets.CR_PASSWORD }}
+
+      # Push the image that was tested, overwriting the previous one
+      - name: Push to the container registry
+        if: steps.push.outputs.push == 'true'
+        env:
+          IMAGE: ${{ matrix.image }}
+        run: |
+          case "$IMAGE" in
+            netsky-*) target="$REGISTRY/$PROJECT/bf2-netsky:${IMAGE#netsky-}" ;;
+            *) target="$REGISTRY/$PROJECT/bf2-docker:$IMAGE" ;;
+          esac
+          docker tag "bf2-docker-test/$IMAGE" "$target"
+          docker push "$target"
+          echo "Pushed \`$target\`" >> "$GITHUB_STEP_SUMMARY"

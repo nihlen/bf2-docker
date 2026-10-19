@@ -57,6 +57,7 @@ docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD
 
 - [netsky-2v2](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2): 2v2 chopper server
 - [netsky-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2-nocheck): 2v2 chopper server without PunkBuster and MD5 checks
+- [netsky-openbf2-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-2v2-nocheck): netsky-2v2-nocheck with the server binaries replaced by OpenBF2, an open source implementation. Uses `debian:trixie-slim` since OpenBF2 needs a newer glibc. OpenBF2 loads its own BF2Hub module from `mods/bf2/openbf2.con` (`openbf2.addModDll "bf2hub"`) instead of `start_bf2hub.sh`.
 - [netsky-chopper-mayhem](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-chopper-mayhem): Chopper mayhem on Dalian Plant
 - [netsky-dogfight](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-dogfight): Dogfight server
 - [netsky-inf](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-inf): Infantry server
@@ -133,5 +134,7 @@ First set up Docker Desktop on Windows (WSL2).
 Download the assets (see assets.txt) and put them in the images/\*/assets/build/ folder so you don't need to redownload them on each build. Maps (see maps.txt) go in the images/\*/assets/build/maps/ folder. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
 
 Test your changes with `tests/run.sh static` and `tests/run.sh build <image>`, see [tests](tests/README.md).
+
+The [CI workflow](.github/workflows/ci.yml) runs the static checks on every push and pull request. Images with changes in `images/<image>/` are built and smoke tested (all images if `tests/` or `.github/` changed). Tested images are pushed to `cr.nihlen.net/library/bf2-netsky:<name>` (`images/netsky-<name>`) or `cr.nihlen.net/library/bf2-docker:<image>`, overwriting the previous image. Images are only pushed from the branches in the `PUSH_BRANCHES` repository variable (default `master`), using the `CR_USERNAME` and `CR_PASSWORD` secrets. Set the `CR_ORIGIN_IP` secret to the registry's origin IP to push past Cloudflare's 100 MB upload limit, since the image layers are larger. On the default branch it can also be run manually for selected images under Actions > CI > Run workflow.
 
 Contributions to new or existing images are welcome if you want them public.

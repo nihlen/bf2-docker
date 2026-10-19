@@ -5,6 +5,7 @@ Run from the repository root with bash (Git Bash on Windows). Requires Docker an
 ```sh
 tests/run.sh static                    # all images
 tests/run.sh build netsky-2v2          # one or more images
+tests/run.sh smoke netsky-2v2          # start the image and check that it works
 tests/run.sh all
 ```
 
@@ -32,6 +33,20 @@ Put the downloaded assets and maps in the image folders (see the main README) to
 ```sh
 tests/run.sh build --keep netsky-dogfight
 ```
+
+## smoke
+
+Starts each image (building it first if needed) with test passwords and checks that it works, depending on what the image contains:
+
+- The `bf2` process starts and the game port (16567/udp) is open.
+- OpenBF2 loads every module listed in `mods/bf2/openbf2.con` (checked on the server console).
+- ModManager RCON accepts a login, the server name is set from `ENV_SERVER_NAME`, and all maps in `maplist.con` and modules in `modmanager.con` are loaded.
+- nginx serves the demo list at `/demos/`.
+- The demo hook runs like the server runs it after a round, and the demo is then listed and downloadable.
+- `bf2tool.php` returns the settings with the API key and refuses a wrong key.
+- The container keeps running.
+
+The container ports are published on random localhost ports, so the tests don't conflict with running servers. On failure the end of the container log is printed.
 
 ## Tools
 

@@ -1,0 +1,3 @@
+https://static.nihlen.net/bf2/server/bf2-linuxded-1.5.3153.0-installer.tgz
+https://static.nihlen.net/bf2/server/ModManager-v2.2c.zip
+https://static.nihlen.net/bf2/server/openbf2-server.zip

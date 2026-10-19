@@ -1,8 +1,9 @@
 #!/bin/bash
 # Runs the tests for all images or the given images
-# Usage: tests/run.sh <static|build|all> [--keep] [image...]
+# Usage: tests/run.sh <static|build|smoke|all> [--keep] [image...]
 #   static  check asset lists, checksums, maplists and map changes, and shellcheck the scripts
 #   build   build the images and check the server files inside them (--keep saves the maps to tests/out/<image>)
+#   smoke   start the images and check that the server, RCON and web server work
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 2
 
@@ -68,6 +69,17 @@ run_static() {
     fi
 }
 
+run_smoke() {
+    for image in "${IMAGES[@]}"; do
+        echo "### Smoke $image"
+        if docker build -q -t "bf2-docker-test/$image" "images/$image" > /dev/null; then
+            "$PYTHON" tests/smoke/smoke.py "images/$image" "bf2-docker-test/$image" || FAILED+=("smoke $image")
+        else
+            FAILED+=("smoke $image (build failed)")
+        fi
+    done
+}
+
 run_build() {
     for image in "${IMAGES[@]}"; do
         echo "### Build $image"
@@ -78,8 +90,9 @@ run_build() {
 case "$SUITE" in
     static) run_static ;;
     build) run_build ;;
-    all) run_static; run_build ;;
-    *) sed -n '2,5p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
+    smoke) run_smoke ;;
+    all) run_static; run_build; run_smoke ;;
+    *) sed -n '2,6p' "$0" | sed 's/^# \{0,1\}//'; exit 2 ;;
 esac
 
 echo
