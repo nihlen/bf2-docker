@@ -1,1 +1,1 @@
-https://www.bf-games.net/downloads/mirror/2956 bf2-linuxded-1.5.3153.0-installer.tgz
+https://static.nihlen.net/bf2/server/bf2-linuxded-1.5.3153.0-installer.tgz

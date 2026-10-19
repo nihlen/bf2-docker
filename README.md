@@ -132,4 +132,6 @@ First set up Docker Desktop on Windows (WSL2).
 
 Download the assets (see assets.txt) and put them in the images/\*/assets/build/ folder so you don't need to redownload them on each build. Maps (see maps.txt) go in the images/\*/assets/build/maps/ folder. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
 
+Test your changes with `tests/run.sh static` and `tests/run.sh build <image>`, see [tests](tests/README.md).
+
 Contributions to new or existing images are welcome if you want them public.

@@ -4,6 +4,9 @@ set -e
 VOLUME='/home/bf2/srv'
 TMP='/home/bf2/tmp'
 
+# Debian bullseye has been moved to the archive
+sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
+
 # Get required packages and create our user
 # libncurses5 = run bf2
 apt -y update

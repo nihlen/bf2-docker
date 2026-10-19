@@ -1,0 +1,2 @@
+# mkdir -m with -p is fine, the parent folders are created first
+disable=SC2174

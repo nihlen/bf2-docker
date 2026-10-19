@@ -11,6 +11,9 @@ MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
 MONOINSTALLER="$TMP/mono-1.1.12.1_0-installer.bin"
 BF2CCD_ZIP="$TMP/BF2CCD_1.4.2446.zip"
 
+# Debian bullseye has been moved to the archive
+sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
+
 # Get required packages
 dpkg --add-architecture i386
 apt -y update
@@ -20,11 +23,10 @@ apt-get -y install wget expect unzip libglib2.0-0:i386
 # Download missing assets
 while IFS=" " read url filename
 do
-    args=(-nc -q --show-progress --progress=bar:force:noscroll)
-    if [ -n "$filename" ]; then
-        args+=(-O "$filename")
+    filename="${filename:-${url##*/}}"
+    if [ ! -f "$filename" ]; then
+        wget -q --show-progress --progress=bar:force:noscroll -O "$filename" "$url"
     fi
-    wget "${args[@]}" "$url"
 done < assets.txt
 
 # Verify checksums

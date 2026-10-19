@@ -7,6 +7,9 @@ TMP='/home/bf2/tmp'
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
 
+# Debian bullseye has been moved to the archive
+sed -i 's|deb.debian.org|archive.debian.org|g' /etc/apt/sources.list
+
 # Get required packages
 apt -y update
 apt-get -y update
@@ -15,11 +18,10 @@ apt-get -y install wget expect
 # Download missing assets
 while IFS=" " read url filename
 do
-    args=(-nc -q --show-progress --progress=bar:force:noscroll)
-    if [ -n "$filename" ]; then
-        args+=(-O "$filename")
+    filename="${filename:-${url##*/}}"
+    if [ ! -f "$filename" ]; then
+        wget -q --show-progress --progress=bar:force:noscroll -O "$filename" "$url"
     fi
-    wget "${args[@]}" "$url"
 done < assets.txt
 
 # Verify checksums
