@@ -1,0 +1,10 @@
+<map gsid="0">
+	<name>idf_kubra_dam</name>
+	<briefing locid="A modified version of the original, idF! - Kubra Dam provides a MiG-29 and F-18 on each team for fair and balanced dogfights. All vehicles are on 5 second respawns with a maximum of 5 spawns per vehicle. As a bonus, there is no out of bounds on this map, allowing dogfights to take their course without interruption.">map description for modders maps not localized (english only)</briefing>
+	<music> common/sound/menu/music/load_MEC_music.ogg </music>
+	<modes>
+		<mode type="gpm_cq">
+			<maptype players="64" type="assault" locid="GAMEMODE_DESCRIPTION_assault">Unlocalized test for this mode on this map</maptype>
+		</mode>
+	</modes>
+</map>

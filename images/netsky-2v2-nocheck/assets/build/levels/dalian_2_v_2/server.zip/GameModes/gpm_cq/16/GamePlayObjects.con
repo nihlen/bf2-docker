@@ -1,0 +1,255 @@
+rem ********** Object Spawner **********
+rem [ObjectSpawnerTemplate: AH1Z_CH_US_AttakHeli]
+ObjectTemplate.create ObjectSpawner AH1Z_CH_US_AttakHeli
+ObjectTemplate.activeSafe ObjectSpawner AH1Z_CH_US_AttakHeli
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ahe_ah1z
+ObjectTemplate.setObjectTemplate 2 AHE_AH1Z
+ObjectTemplate.minSpawnDelay 1
+ObjectTemplate.maxSpawnDelay 2
+ObjectTemplate.maxNrOfObjectSpawned 10
+
+rem [ObjectSpawnerTemplate: Z10_CH_US_AttakHeli]
+ObjectTemplate.create ObjectSpawner Z10_CH_US_AttakHeli
+ObjectTemplate.activeSafe ObjectSpawner Z10_CH_US_AttakHeli
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 AHE_Z10
+ObjectTemplate.setObjectTemplate 2 ahe_z10
+ObjectTemplate.minSpawnDelay 2
+ObjectTemplate.maxSpawnDelay 3
+ObjectTemplate.maxNrOfObjectSpawned 10
+
+if v_arg1 == host
+
+   rem [ObjectSpawner: AH1Z_CH_US_AttakHeli]
+   Object.create AH1Z_CH_US_AttakHeli
+   Object.absolutePosition 255.116/147.099/-258.676
+   Object.rotation -24.966/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: Z10_CH_US_AttakHeli]
+   Object.create Z10_CH_US_AttakHeli
+   Object.absolutePosition -218.066/152.399/159.076
+   Object.rotation 163.667/0.000/0.000
+   Object.setControlPointId 402
+   Object.layer 5
+   
+   rem ========= ADDED HELIS ==========
+   
+   Object.create AH1Z_CH_US_AttakHeli
+   Object.absolutePosition -244.291/152.399/169.686
+   Object.rotation 146.992/0.000/0.000
+   Object.setControlPointId 402
+   Object.layer 5
+
+   Object.create Z10_CH_US_AttakHeli
+   Object.absolutePosition 253.765/147.099/-292.296
+   Object.rotation -33.299/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+   
+   rem ========= ADDED PADS ==========
+   
+	Object.create concreteblock_helipad
+	Object.absolutePosition 254.779/147.099/-294.122
+	Object.rotation 0.3/0.0/0.0
+	Object.layer 1
+
+	Object.create concreteblock_helipad
+	Object.absolutePosition -243.891/152.399/170.379
+	Object.rotation -1.0/0.0/0.0
+	Object.layer 1
+
+
+endIf
+
+rem ********** Spawn Points **********
+rem [SpawnPointTemplate: AH1Z_1]
+ObjectTemplate.create SpawnPoint AH1Z_1
+ObjectTemplate.activeSafe SpawnPoint AH1Z_1
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+
+rem [SpawnPoint: AH1Z_1]
+Object.create AH1Z_1
+Object.absolutePosition 253.818/147.099/-272.551
+Object.rotation -59.199/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: AH1Z_2]
+ObjectTemplate.create SpawnPoint AH1Z_2
+ObjectTemplate.activeSafe SpawnPoint AH1Z_2
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+
+rem [SpawnPoint: AH1Z_2]
+Object.create AH1Z_2
+Object.absolutePosition 250.625/147.099/-273.578
+Object.rotation -46.633/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: AH1Z_3]
+ObjectTemplate.create SpawnPoint AH1Z_3
+ObjectTemplate.activeSafe SpawnPoint AH1Z_3
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+
+rem [SpawnPoint: AH1Z_3]
+Object.create AH1Z_3
+Object.absolutePosition 256.430/147.099/-273.619
+Object.rotation -60.675/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: AH1Z_4]
+ObjectTemplate.create SpawnPoint AH1Z_4
+ObjectTemplate.activeSafe SpawnPoint AH1Z_4
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setEnterOnSpawn 1
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+ObjectTemplate.setGroup 1
+
+rem [SpawnPoint: AH1Z_4]
+rem Object.create AH1Z_4
+rem Object.absolutePosition 255.116/147.099/-258.676
+rem Object.rotation -51.308/0.000/0.000
+rem Object.layer 5
+
+rem [SpawnPoint: AH1Z_4] ##############################
+Object.create AH1Z_4
+Object.absolutePosition 255.116/151.099/-258.676
+Object.rotation -24.966/0.000/0.000
+Object.layer 5
+
+
+
+rem [SpawnPointTemplate: Z10_1]
+ObjectTemplate.create SpawnPoint Z10_1
+ObjectTemplate.activeSafe SpawnPoint Z10_1
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 402
+
+rem [SpawnPoint: Z10_1]
+Object.create Z10_1
+Object.absolutePosition -214.109/152.399/170.997
+Object.rotation 150.047/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: Z10_2]
+ObjectTemplate.create SpawnPoint Z10_2
+ObjectTemplate.activeSafe SpawnPoint Z10_2
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 402
+
+rem [SpawnPoint: Z10_2]
+Object.create Z10_2
+Object.absolutePosition -212.177/152.399/173.395
+Object.rotation 160.094/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: Z10_3]
+ObjectTemplate.create SpawnPoint Z10_3
+ObjectTemplate.activeSafe SpawnPoint Z10_3
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 402
+
+rem [SpawnPoint: Z10_3]
+Object.create Z10_3
+Object.absolutePosition -217.346/152.399/173.262
+Object.rotation 144.927/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: Z10_4]
+ObjectTemplate.create SpawnPoint Z10_4
+ObjectTemplate.activeSafe SpawnPoint Z10_4
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 402
+ObjectTemplate.setEnterOnSpawn 1
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+ObjectTemplate.setGroup 1
+
+rem [SpawnPoint: Z10_4]
+rem Object.create Z10_4
+rem Object.absolutePosition -214.222/152.399/175.332
+rem Object.rotation 156.284/0.000/0.000
+rem Object.layer 5
+
+rem [SpawnPoint: Z10_4] ##############################
+Object.create Z10_4
+Object.absolutePosition -218.066/156.399/159.076
+Object.rotation 163.667/0.000/0.000
+Object.layer 5
+
+
+
+rem ********** Control Points **********
+rem [ControlPointTemplate: AH1Z]
+ObjectTemplate.create ControlPoint AH1Z
+ObjectTemplate.activeSafe ControlPoint AH1Z
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName AH1Z
+ObjectTemplate.radius 2
+ObjectTemplate.team 2
+ObjectTemplate.controlPointId 401
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+rem [ControlPointTemplate: Z10]
+ObjectTemplate.create ControlPoint Z10
+ObjectTemplate.activeSafe ControlPoint Z10
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName Z10
+ObjectTemplate.radius 2
+ObjectTemplate.team 1
+ObjectTemplate.controlPointId 402
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+if v_arg1 == host
+
+   rem [ControlPoint: AH1Z]
+   Object.create AH1Z
+   Object.absolutePosition 242.214/147.099/-265.633
+   Object.layer 5
+
+   rem [ControlPoint: Z10]
+   Object.create Z10
+   Object.absolutePosition -206.573/152.399/157.918
+   Object.layer 5
+
+endIf

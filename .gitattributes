@@ -4,3 +4,6 @@
 *.txt text eol=lf
 *.sha512 text eol=lf
 extract text eol=lf
+
+# Map files are patched into server.zip as-is
+**/assets/build/levels/** -text

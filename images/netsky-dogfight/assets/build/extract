@@ -1,0 +1,13 @@
+#!/usr/bin/expect
+
+set timeout -1
+spawn "./bf2-linuxded-1.5.3153.0-installer.sh" --keep --target ./srv/
+
+expect {
+       eof { send_user "\nunexpected eof in extraction\n"; exit 1 }
+       "*ress return"
+}
+
+send "^c"
+
+send_user "\nExtraction finished\n"

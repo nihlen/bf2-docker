@@ -1,0 +1,4 @@
+maplist.append idf_arena gpm_cq 64
+maplist.append idf_gulf gpm_cq 64
+maplist.append idf_kubra_dam gpm_cq 64
+maplist.append dogfighting gpm_cq 64

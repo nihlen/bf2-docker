@@ -1,0 +1,741 @@
+rem ********** Object Spawner **********
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_ART1_0]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_ART1_0
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_ART1_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ARS_D30
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_ART1]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_ART1
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_ART1
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 USART_LW155
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_Art_2]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_Art_2
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_Art_2
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 USART_LW155
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_HT]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_HT
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_HT
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 USTNK_M1A2
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_LJ2]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_LJ2
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_LJ2
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_PARATROOPER
+ObjectTemplate.setObjectTemplate 2 JEEP_FAAV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_HT]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_HT
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_HT
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 TNK_TYPE98
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_HJ1]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_HJ1
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_HJ1
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_NANJING
+ObjectTemplate.setObjectTemplate 2 USJEP_HMMWV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_AH_0]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_AH_0
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_AH_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 ahe_ah1z
+ObjectTemplate.minSpawnDelay 1
+ObjectTemplate.maxSpawnDelay 2
+ObjectTemplate.maxNrOfObjectSpawned 100
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_AH]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_AH
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_AH
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ahe_z10
+ObjectTemplate.minSpawnDelay 1
+ObjectTemplate.maxSpawnDelay 2
+ObjectTemplate.maxNrOfObjectSpawned 100
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_HJ]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_HJ
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_HJ
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_NANJING
+ObjectTemplate.setObjectTemplate 2 USJEP_HMMWV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_AAS]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_AAS
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_AAS
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 IGLA_DJIGIT
+ObjectTemplate.setObjectTemplate 2 USAAS_STINGER
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_AAS]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_AAS
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_AAS
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 IGLA_DJIGIT
+ObjectTemplate.setObjectTemplate 2 USAAS_STINGER
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_UAV]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_UAV
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_UAV
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 aircontroltower
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_mobileradar_1]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_mobileradar_1
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_mobileradar_1
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 mobileradar_ch_dest
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_moblieradar]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_moblieradar
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_moblieradar
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 2 mobileradar_us_dest
+ObjectTemplate.minSpawnDelay 360
+ObjectTemplate.maxSpawnDelay 360
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_CH_US_LightJeep]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_CH_US_LightJeep
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_CH_US_LightJeep
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_PARATROOPER
+ObjectTemplate.setObjectTemplate 2 JEEP_FAAV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_CH_US_LightJeep]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_CH_US_LightJeep
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_CH_US_LightJeep
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_PARATROOPER
+ObjectTemplate.setObjectTemplate 2 JEEP_FAAV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_smg2]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_smg2
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_smg2
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 CH_BIPOD
+ObjectTemplate.setObjectTemplate 2 US_BIPOD
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_smg3]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_smg3
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_smg3
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 CH_BIPOD
+ObjectTemplate.setObjectTemplate 2 US_BIPOD
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_smg7]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_smg7
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_smg7
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.treeCollisionDiameter 0.1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 CH_BIPOD
+ObjectTemplate.setObjectTemplate 2 US_BIPOD
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_CH_US_HeavyJeep]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_CH_US_HeavyJeep
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_CH_US_HeavyJeep
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_NANJING
+ObjectTemplate.setObjectTemplate 2 USJEP_HMMWV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_CH_US_LightJeep_0]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_CH_US_LightJeep_0
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_CH_US_LightJeep_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_PARATROOPER
+ObjectTemplate.setObjectTemplate 2 JEEP_FAAV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_refinery_CH_US_HeavyJeep]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_refinery_CH_US_HeavyJeep
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_refinery_CH_US_HeavyJeep
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 JEP_NANJING
+ObjectTemplate.setObjectTemplate 2 USJEP_HMMWV
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_CH_US_ART]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_CH_US_ART
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_CH_US_ART
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ARS_D30
+ObjectTemplate.teamOnVehicle 1
+
+rem [ObjectSpawnerTemplate: CPNAME_DO_16_oldcity_UAV]
+ObjectTemplate.create ObjectSpawner CPNAME_DO_16_oldcity_UAV
+ObjectTemplate.activeSafe ObjectSpawner CPNAME_DO_16_oldcity_UAV
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 aircontroltower_chi
+ObjectTemplate.teamOnVehicle 1
+
+if v_arg1 == host
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_ART1_0]
+   Object.create CPNAME_DO_16_oldcity_ART1_0
+   Object.absolutePosition 70.926/156.494/303.917
+   Object.rotation -171.561/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_ART1]
+   Object.create CPNAME_DO_16_refinery_ART1
+   Object.absolutePosition -98.000/144.493/-277.000
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_Art_2]
+   Object.create CPNAME_DO_16_refinery_Art_2
+   Object.absolutePosition -62.708/144.493/-285.482
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_HT]
+   Object.create CPNAME_DO_16_refinery_HT
+   Object.absolutePosition -31.018/144.432/-268.445
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_LJ2]
+   Object.create CPNAME_DO_16_refinery_LJ2
+   Object.absolutePosition -21.566/144.485/-252.743
+   Object.rotation 90.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_HT]
+   Object.create CPNAME_DO_16_oldcity_HT
+   Object.absolutePosition 120.000/158.493/294.000
+   Object.rotation -180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_HJ1]
+   Object.create CPNAME_DO_16_oldcity_HJ1
+   Object.absolutePosition 113.000/152.496/265.000
+   Object.rotation 180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_AH_0]
+   Object.create CPNAME_DO_16_refinery_AH_0
+   Object.absolutePosition 19.000/144.432/-289.000
+   Object.rotation 90.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_AH]
+   Object.create CPNAME_DO_16_oldcity_AH
+   Object.absolutePosition 187.000/157.997/296.000
+   Object.rotation 167.449/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_HJ]
+   Object.create CPNAME_DO_16_refinery_HJ
+   Object.absolutePosition -43.014/144.485/-189.429
+   Object.rotation 90.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_AAS]
+   Object.create CPNAME_DO_16_oldcity_AAS
+   Object.absolutePosition 108.139/145.798/168.012
+   Object.rotation -180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_AAS]
+   Object.create CPNAME_DO_16_refinery_AAS
+   Object.absolutePosition -40.033/146.482/-292.925
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_UAV]
+   Object.create CPNAME_DO_16_refinery_UAV
+   Object.absolutePosition -27.000/144.432/-320.000
+   Object.rotation 178.852/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_mobileradar_1]
+   Object.create CPNAME_DO_16_oldcity_mobileradar_1
+   Object.absolutePosition 26.803/150.540/196.077
+   Object.rotation -90.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_moblieradar]
+   Object.create CPNAME_DO_16_refinery_moblieradar
+   Object.absolutePosition 45.217/145.435/-196.000
+   Object.rotation 90.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_CH_US_LightJeep]
+   Object.create CPNAME_DO_16_refinery_CH_US_LightJeep
+   Object.absolutePosition -10.000/144.485/-202.000
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_CH_US_LightJeep]
+   Object.create CPNAME_DO_16_oldcity_CH_US_LightJeep
+   Object.absolutePosition 141.319/158.493/292.466
+   Object.rotation 180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_smg2]
+   Object.create CPNAME_DO_16_oldcity_smg2
+   Object.absolutePosition 37.004/153.629/263.317
+   Object.rotation 18.280/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_smg3]
+   Object.create CPNAME_DO_16_oldcity_smg3
+   Object.absolutePosition 138.389/153.605/256.144
+   Object.rotation -90.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_smg7]
+   Object.create CPNAME_DO_16_refinery_smg7
+   Object.absolutePosition -22.438/146.020/-168.755
+   Object.rotation -45.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_CH_US_HeavyJeep]
+   Object.create CPNAME_DO_16_oldcity_CH_US_HeavyJeep
+   Object.absolutePosition 79.584/152.496/225.000
+   Object.rotation -180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_CH_US_LightJeep_0]
+   Object.create CPNAME_DO_16_oldcity_CH_US_LightJeep_0
+   Object.absolutePosition 119.824/152.496/238.830
+   Object.rotation -180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_refinery_CH_US_HeavyJeep]
+   Object.create CPNAME_DO_16_refinery_CH_US_HeavyJeep
+   Object.absolutePosition -32.000/144.485/-235.000
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 35
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_CH_US_ART]
+   Object.create CPNAME_DO_16_oldcity_CH_US_ART
+   Object.absolutePosition 46.396/152.496/220.991
+   Object.rotation 180.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+   rem [ObjectSpawner: CPNAME_DO_16_oldcity_UAV]
+   Object.create CPNAME_DO_16_oldcity_UAV
+   Object.absolutePosition 120.000/158.493/312.000
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 401
+   Object.layer 5
+
+endIf
+
+rem ********** Spawn Points **********
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_107]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_107
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_107
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_107]
+Object.create CPNAME_DO_16_refinery_107
+Object.absolutePosition 15.092/144.432/-278.666
+Object.rotation 150.750/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_10_3]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_10_3
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_10_3
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_10_3]
+Object.create CPNAME_DO_16_refinery_10_3
+Object.absolutePosition 21.362/144.432/-294.518
+Object.rotation -1.742/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_10_0]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_10_0
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_10_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_10_0]
+Object.create CPNAME_DO_16_refinery_10_0
+Object.absolutePosition 16.173/144.432/-282.322
+Object.rotation 144.767/-0.001/-0.007
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_oldcity_1_1]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_oldcity_1_1
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_oldcity_1_1
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_oldcity_1_1]
+Object.create CPNAME_DO_16_oldcity_1_1
+Object.absolutePosition 187.265/157.997/288.638
+Object.rotation -11.951/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_oldcity_3_1]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_oldcity_3_1
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_oldcity_3_1
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_oldcity_3_1]
+Object.create CPNAME_DO_16_oldcity_3_1
+Object.absolutePosition 194.679/157.997/292.541
+Object.rotation -40.600/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_6]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_6
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_6
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_6]
+Object.create CPNAME_DO_16_refinery_6
+Object.absolutePosition 10.606/144.432/-282.532
+Object.rotation 132.400/0.000/1.116
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_7]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_7
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_7
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_7]
+Object.create CPNAME_DO_16_refinery_7
+Object.absolutePosition 11.090/144.432/-278.034
+Object.rotation 135.207/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_oldcity_3_2]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_oldcity_3_2
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_oldcity_3_2
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_oldcity_3_2]
+Object.create CPNAME_DO_16_oldcity_3_2
+Object.absolutePosition 193.361/157.963/299.834
+Object.rotation -129.200/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_oldcity_4]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_oldcity_4
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_oldcity_4
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_oldcity_4]
+Object.create CPNAME_DO_16_oldcity_4
+Object.absolutePosition 191.074/157.937/300.930
+Object.rotation -136.400/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_6_0]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_6_0
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_6_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_6_0]
+Object.create CPNAME_DO_16_refinery_6_0
+Object.absolutePosition 19.077/144.432/-278.968
+Object.rotation 140.325/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_refinery_7_0]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_refinery_7_0
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_refinery_7_0
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 35
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_refinery_7_0]
+Object.create CPNAME_DO_16_refinery_7_0
+Object.absolutePosition 6.747/144.432/-285.374
+Object.rotation 92.763/0.000/0.000
+Object.layer 5
+
+rem [SpawnPointTemplate: CPNAME_DO_16_oldcity_5]
+ObjectTemplate.create SpawnPoint CPNAME_DO_16_oldcity_5
+ObjectTemplate.activeSafe SpawnPoint CPNAME_DO_16_oldcity_5
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 401
+ObjectTemplate.setOnlyForHuman 1
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: CPNAME_DO_16_oldcity_5]
+Object.create CPNAME_DO_16_oldcity_5
+Object.absolutePosition 183.039/157.997/289.969
+Object.rotation 0.000/0.000/0.000
+Object.layer 5
+
+rem ********** Control Points **********
+rem [ControlPointTemplate: CPNAME_DO_16_refinery]
+ObjectTemplate.create ControlPoint CPNAME_DO_16_refinery
+ObjectTemplate.activeSafe ControlPoint CPNAME_DO_16_refinery
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName CPNAME_DO_16_refinery
+ObjectTemplate.radius 15
+ObjectTemplate.team 2
+ObjectTemplate.controlPointId 35
+ObjectTemplate.areaValueTeam1 50
+ObjectTemplate.areaValueTeam2 50
+ObjectTemplate.timeToGetControl 30
+ObjectTemplate.timeToLoseControl 40
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+rem [ControlPointTemplate: CPNAME_DO_16_oldcity]
+ObjectTemplate.create ControlPoint CPNAME_DO_16_oldcity
+ObjectTemplate.activeSafe ControlPoint CPNAME_DO_16_oldcity
+ObjectTemplate.modifiedByUser "1337Alex"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName CPNAME_DO_16_oldcity
+ObjectTemplate.radius 10
+ObjectTemplate.team 1
+ObjectTemplate.controlPointId 401
+ObjectTemplate.areaValueTeam1 50
+ObjectTemplate.areaValueTeam2 50
+ObjectTemplate.timeToGetControl 30
+ObjectTemplate.timeToLoseControl 40
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+if v_arg1 == host
+
+   rem [ControlPoint: CPNAME_DO_16_refinery]
+   Object.create CPNAME_DO_16_refinery
+   Object.absolutePosition -53.518/144.485/-243.046
+   Object.layer 5
+
+   rem [ControlPoint: CPNAME_DO_16_oldcity]
+   Object.create CPNAME_DO_16_oldcity
+   Object.absolutePosition 129.000/152.486/255.000
+   Object.layer 5
+
+endIf
+
+CombatAreaManager.use 1
+CombatAreaManager.timeAllowedOutside 10.000000
+CombatArea.create CombatArea_0_Default
+CombatArea.min 0.000000/0.000000
+CombatArea.max 0.000000/0.000000
+CombatArea.addAreaPoint -60.047791/-408.481506
+CombatArea.addAreaPoint -30.682800/-410.223022
+CombatArea.addAreaPoint 5.121704/-414.368591
+CombatArea.addAreaPoint 42.958618/-409.232483
+CombatArea.addAreaPoint 62.441406/-403.178772
+CombatArea.addAreaPoint 101.673950/-384.062805
+CombatArea.addAreaPoint 136.864502/-384.191467
+CombatArea.addAreaPoint 162.095703/-380.890869
+CombatArea.addAreaPoint 184.252075/-370.854187
+CombatArea.addAreaPoint 210.491577/-355.966736
+CombatArea.addAreaPoint 245.269165/-330.929077
+CombatArea.addAreaPoint 253.338623/-308.842712
+CombatArea.addAreaPoint 257.002808/-276.835022
+CombatArea.addAreaPoint 285.123291/-260.986877
+CombatArea.addAreaPoint 300.122314/-241.257813
+CombatArea.addAreaPoint 329.351563/-193.575073
+CombatArea.addAreaPoint 347.391846/-164.280273
+CombatArea.addAreaPoint 353.645630/-130.364807
+CombatArea.addAreaPoint 376.376709/-101.056824
+CombatArea.addAreaPoint 393.883301/-75.470825
+CombatArea.addAreaPoint 428.662109/-15.446411
+CombatArea.addAreaPoint 441.451660/21.982788
+CombatArea.addAreaPoint 442.801147/77.032471
+CombatArea.addAreaPoint 433.434692/146.604614
+CombatArea.addAreaPoint 412.799927/189.840820
+CombatArea.addAreaPoint 400.212769/234.511597
+CombatArea.addAreaPoint 375.366577/255.291748
+CombatArea.addAreaPoint 344.732178/284.119751
+CombatArea.addAreaPoint 282.957642/321.252563
+CombatArea.addAreaPoint 237.304810/340.729492
+CombatArea.addAreaPoint 209.467163/363.170898
+CombatArea.addAreaPoint 175.031982/372.501099
+CombatArea.addAreaPoint 113.808228/387.774902
+CombatArea.addAreaPoint 89.952271/383.003174
+CombatArea.addAreaPoint 59.794434/402.175659
+CombatArea.addAreaPoint 43.602905/402.649658
+CombatArea.addAreaPoint -0.076599/392.229370
+CombatArea.addAreaPoint -49.305664/388.797485
+CombatArea.addAreaPoint -92.823975/385.602295
+CombatArea.addAreaPoint -143.693542/371.989868
+CombatArea.addAreaPoint -180.478760/345.557495
+CombatArea.addAreaPoint -206.912109/297.243896
+CombatArea.addAreaPoint -239.121460/221.243286
+CombatArea.addAreaPoint -258.714966/186.322998
+CombatArea.addAreaPoint -281.055847/159.545410
+CombatArea.addAreaPoint -298.658752/146.181274
+CombatArea.addAreaPoint -331.504150/105.508423
+CombatArea.addAreaPoint -345.235657/62.545898
+CombatArea.addAreaPoint -348.152039/25.862793
+CombatArea.addAreaPoint -338.533508/-11.948730
+CombatArea.addAreaPoint -322.199341/-42.612366
+CombatArea.addAreaPoint -302.453674/-76.645569
+CombatArea.addAreaPoint -290.544067/-131.200867
+CombatArea.addAreaPoint -282.717285/-172.100525
+CombatArea.addAreaPoint -277.594666/-206.991455
+CombatArea.addAreaPoint -271.026550/-218.698120
+CombatArea.addAreaPoint -259.654724/-226.103149
+CombatArea.addAreaPoint -230.934143/-238.078918
+CombatArea.addAreaPoint -204.385986/-247.914429
+CombatArea.addAreaPoint -184.818054/-267.305969
+CombatArea.addAreaPoint -174.582703/-296.312256
+CombatArea.addAreaPoint -165.218933/-326.701233
+CombatArea.addAreaPoint -146.082336/-356.673218
+CombatArea.addAreaPoint -134.512878/-373.096375
+CombatArea.addAreaPoint -101.631409/-397.633972
+CombatArea.addAreaPoint -76.590820/-405.606018
+CombatArea.team 0
+CombatArea.vehicles 4
+CombatArea.layer 1
+

@@ -53,6 +53,22 @@ docker build -t nihlen/bf2-docker/bf2hub-pb-mm-bf2cc https://github.com/nihlen/b
 docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD='rconpw123' -e ENV_BF2CCD_PASSWORD='bf2ccdpw123' -e ENV_DEMOS_URL='http://www.example.com:80/' -p 80:80/tcp -p 4711:4711/tcp -p 4712:4712/tcp -p 16567:16567/udp -p 27901:27901/udp -p 29900:29900/udp nihlen/bf2-docker/bf2hub-pb-mm-bf2cc:latest
 ```
 
+### netsky-*
+
+- [netsky-2v2](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2): 2v2 chopper server
+- [netsky-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2-nocheck): 2v2 chopper server without PunkBuster and MD5 checks
+- [netsky-chopper-mayhem](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-chopper-mayhem): Chopper mayhem on Dalian Plant
+- [netsky-dogfight](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-dogfight): Dogfight server
+- [netsky-inf](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-inf): Infantry server
+
+Images used for the NeTskY servers. Based on bf2hub-pb-mm-webadmin with custom settings and maps.
+
+### Custom maps
+
+Custom maps are downloaded during the build. List the map archive URLs in `assets/build/maps.txt` and their checksums in `assets/build/maps.sha512`. Each archive should contain a single map folder, like the ones on [static.nihlen.net/bf2/maps](https://static.nihlen.net/bf2/maps/). Only the server files are extracted, `client.zip` and `archive.md5` are skipped.
+
+Server-side changes to a map are placed in `assets/build/levels/<map>`. Files in `levels/<map>/server.zip/` are updated inside the map's server.zip, so you only need to commit the changed files (e.g. `levels/dalian_2_v_2/server.zip/GameModes/gpm_cq/16/GamePlayObjects.con`). Other files, like `archive.md5`, are copied to the map folder as-is.
+
 ### Docker Compose
 
 To simplify setting up multiple servers on the same host you can use Docker Compose. The `image:` property can point to a locally built image or a URL to your container registry of choice. Note that the game server port and gamespy port need to match in the environment variables and in the Docker port configuration.
@@ -114,6 +130,6 @@ Place the docker-compose.yml on the host and run `docker-compose up -d --remove-
 
 First set up Docker Desktop on Windows (WSL2).
 
-Download the assets (see assets.txt) and put them in the images/\*/assets/ folder so you don't need to redownload them on each build. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
+Download the assets (see assets.txt) and put them in the images/\*/assets/build/ folder so you don't need to redownload them on each build. Maps (see maps.txt) go in the images/\*/assets/build/maps/ folder. Then make your changes in Dockerfile, build.sh, setup.sh and run.sh. Build and run with `.\build.bat`. Make sure Docker is set to use Linux containers.
 
 Contributions to new or existing images are welcome if you want them public.
