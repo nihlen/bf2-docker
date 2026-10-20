@@ -14,14 +14,14 @@
   </ServerInfo>
   <GameInfo>
     <GameInfoID>1</GameInfoID>
-    <ServerName>bf2-docker</ServerName>
+    <ServerName>{{server_name}}</ServerName>
     <ServerPassword />
     <AllowFreeCam>true</AllowFreeCam>
     <AllowExternalViews>true</AllowExternalViews>
     <AllowNoseCam>true</AllowNoseCam>
     <ShowHitIndicator>true</ShowHitIndicator>
     <DeathCamType>0</DeathCamType>
-    <MaxPlayers>64</MaxPlayers>
+    <MaxPlayers>{{max_players}}</MaxPlayers>
     <PlayersToStart>2</PlayersToStart>
     <StartDelay>15</StartDelay>
     <EndDelay>15</EndDelay>

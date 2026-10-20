@@ -1,6 +1,6 @@
 sv.serverName "{{server_name}}"
 sv.password ""
-sv.internet 1
+sv.internet {{internet}}
 sv.serverIP "0.0.0.0"
 sv.serverPort {{server_port}}
 sv.welcomeMessage ""

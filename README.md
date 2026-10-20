@@ -21,7 +21,7 @@ Running multiple servers on the same host can be done by changing the ports in t
 
 - Battlefield 2 server (1.5.3153.0)
 
-The basic image to run a Battlefield 2 server. Not practical since you can't play online but it can be used as a base.
+The basic image to run a Battlefield 2 server. It runs as a LAN server, since the stock server aborts in internet mode without GameSpy (use one of the BF2Hub images to play online), but it can be used as a base. Set `ENV_INTERNET=1` to start it in internet mode anyway.
 
 ```
 docker build -t nihlen/bf2-docker/default https://github.com/nihlen/bf2-docker.git#master:images/default

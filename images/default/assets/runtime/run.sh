@@ -42,6 +42,8 @@ else
     replace_var '{{max_players}}' "${ENV_MAX_PLAYERS:-"16"}" "$SRV/mods/bf2/settings/serversettings.con"
     replace_var '{{server_port}}' "${ENV_SERVER_PORT:-"16567"}" "$SRV/mods/bf2/settings/serversettings.con"
     replace_var '{{gamespy_port}}' "${ENV_GAMESPY_PORT:-"29900"}" "$SRV/mods/bf2/settings/serversettings.con"
+    # LAN by default: without BF2Hub the stock server can't reach GameSpy and aborts in internet mode
+    replace_var '{{internet}}' "${ENV_INTERNET:-"0"}" "$SRV/mods/bf2/settings/serversettings.con"
 fi
 
 # Start Battlefield 2 server as the bf2 user
