@@ -4,12 +4,14 @@ name: CI
 # Images are pushed from the branches in PUSH_BRANCHES and from manual runs, never from pull requests:
 #   images/netsky-<name>  ->  $REGISTRY/$PROJECT/bf2-netsky:<name>
 #   images/<name>         ->  $REGISTRY/$PROJECT/bf2-docker:<name>
+# They are pushed over the tailnet to $PUSH_REGISTRY (the same Harbor, tailnet only), since the image layers are
+# larger than Cloudflare's 100 MB upload limit on $REGISTRY.
 #
 # Repository settings:
-#   secrets.CR_USERNAME, secrets.CR_PASSWORD  Container registry account with push access
-#   secrets.CR_ORIGIN_IP                      Optional origin IP of the registry, to push straight to it and bypass
-#                                             Cloudflare's 100 MB upload limit (the image layers are larger)
-#   vars.PUSH_BRANCHES                        Branches to push images from, separated by spaces (default: master)
+#   secrets.CR_USERNAME, secrets.CR_PASSWORD         Container registry account with push access
+#   secrets.TS_OAUTH_CLIENT_ID, secrets.TS_AUDIENCE  Tailscale federated identity (OIDC) trust credential for this
+#                                                    repo, with the auth_keys scope and tag:ci
+#   vars.PUSH_BRANCHES                               Branches to push images from, separated by spaces (default: master)
 
 on:
   push:
@@ -31,8 +33,8 @@ concurrency:
 
 env:
   REGISTRY: cr.nihlen.net
+  PUSH_REGISTRY: cr-ts.nihlen.net
   PROJECT: library
-  CR_ORIGIN_IP: ${{ secrets.CR_ORIGIN_IP }}
 
 jobs:
   static:
@@ -77,6 +79,9 @@ jobs:
     needs: changes
     if: needs.changes.outputs.images != '[]'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write # Tailscale federated identity
     strategy:
       fail-fast: false
       matrix:
@@ -107,16 +112,20 @@ jobs:
           echo "Push: $push"
           echo "push=$push" >> "$GITHUB_OUTPUT"
 
-      # docker push runs in the host's dockerd, so the /etc/hosts entry applies to it
-      - name: Bypass Cloudflare for the registry
-        if: steps.push.outputs.push == 'true' && env.CR_ORIGIN_IP != ''
-        run: echo "${CR_ORIGIN_IP} ${REGISTRY}" | sudo tee -a /etc/hosts > /dev/null
+      - name: Connect to Tailscale
+        if: steps.push.outputs.push == 'true'
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          audience: ${{ secrets.TS_AUDIENCE }}
+          tags: tag:ci
+          ping: pve-gateway
 
       - name: Log in to the container registry
         if: steps.push.outputs.push == 'true'
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.PUSH_REGISTRY }}
           username: ${{ secrets.CR_USERNAME }}
           password: ${{ secrets.CR_PASSWORD }}
 
@@ -127,9 +136,9 @@ jobs:
           IMAGE: ${{ matrix.image }}
         run: |
           case "$IMAGE" in
-            netsky-*) target="$REGISTRY/$PROJECT/bf2-netsky:${IMAGE#netsky-}" ;;
-            *) target="$REGISTRY/$PROJECT/bf2-docker:$IMAGE" ;;
+            netsky-*) repo="$PROJECT/bf2-netsky:${IMAGE#netsky-}" ;;
+            *) repo="$PROJECT/bf2-docker:$IMAGE" ;;
           esac
-          docker tag "bf2-docker-test/$IMAGE" "$target"
-          docker push "$target"
-          echo "Pushed \`$target\`" >> "$GITHUB_STEP_SUMMARY"
+          docker tag "bf2-docker-test/$IMAGE" "$PUSH_REGISTRY/$repo"
+          docker push "$PUSH_REGISTRY/$repo"
+          echo "Pushed \`$REGISTRY/$repo\`" >> "$GITHUB_STEP_SUMMARY"

@@ -7,7 +7,7 @@ TMP='/home/bf2/tmp'
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
 MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
-OPENBF2_ZIP="$TMP/openbf2-server.zip"
+OPENBF2_ZIP="$TMP/openbf2-bf2hub-ccf3099-7e37854-glibc-2.32.zip"
 MAPS="$TMP/maps"
 LEVELS="$TMP/srv/mods/bf2/levels"
 
