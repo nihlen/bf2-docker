@@ -117,7 +117,8 @@ services:
   bf2-netsky-openbf2-2v2:
     container_name: bf2-netsky-openbf2-2v2
     image: cr.nihlen.net/library/bf2-netsky:openbf2-2v2
-    restart: on-failure
+    # BF2WebAdmin's .restartserver quits the server with exit code 0, which on-failure would not restart
+    restart: unless-stopped
     environment:
       - ENV_SERVER_NAME=bf2-docker #1
       - ENV_MAX_PLAYERS=16
