@@ -1,10 +1,10 @@
 sv.serverName "{{server_name}}"
 sv.password ""
-sv.internet 1
+sv.internet {{internet}}
 sv.serverIP "0.0.0.0"
 sv.serverPort {{server_port}}
 sv.welcomeMessage "Maps: https://bf2.nihlen.net |Discord: https://discord.gg/DPaJaMKAc3"
-sv.punkBuster 1
+sv.punkBuster 0
 sv.allowFreeCam 1
 sv.allowExternalViews 1
 sv.allowNoseCam 1

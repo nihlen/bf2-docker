@@ -22,7 +22,6 @@ modmanager.loadModule "mm_bf2cc"
 modmanager.loadModule "mm_autobalance"
 #modmanager.loadModule "mm_reserver"
 modmanager.loadModule "mm_iga"
-modmanager.loadModule "mm_webadmin"
 
 #
 # ModManager Announcer
@@ -167,9 +166,3 @@ mm_iga.addWarning "sp|Cheating Stats:%action% %player% stop Stat Padding!"
 mm_iga.addWarning "mr|make room for admin:%action% %player% to make room for an Admin"
 mm_iga.addWarning "nv|name violation:%action% %player% for Name Violation!"
 
-#
-# Web Admin
-#
-mm_webadmin.serverHost "{{bf2wa_host}}"
-mm_webadmin.serverPort {{bf2wa_port}}
-mm_webadmin.timerInterval {{bf2wa_timer_interval}}

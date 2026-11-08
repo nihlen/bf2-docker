@@ -1,0 +1,416 @@
+rem ********** Object Spawner **********
+rem [ObjectSpawnerTemplate: AH1Z]
+ObjectTemplate.create ObjectSpawner AH1Z
+ObjectTemplate.activeSafe ObjectSpawner AH1Z
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ahe_ah1z
+ObjectTemplate.setObjectTemplate 2 AHE_AH1Z
+ObjectTemplate.minSpawnDelay 1
+ObjectTemplate.maxSpawnDelay 1
+ObjectTemplate.maxNrOfObjectSpawned 100
+
+rem [ObjectSpawnerTemplate: Z10]
+ObjectTemplate.create ObjectSpawner Z10
+ObjectTemplate.activeSafe ObjectSpawner Z10
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 AHE_Z10
+ObjectTemplate.setObjectTemplate 2 ahe_z10
+ObjectTemplate.minSpawnDelay 1
+ObjectTemplate.maxSpawnDelay 1
+ObjectTemplate.maxNrOfObjectSpawned 100
+
+rem [ObjectSpawnerTemplate: PLA_CH_US_ART]
+ObjectTemplate.create ObjectSpawner PLA_CH_US_ART
+ObjectTemplate.activeSafe ObjectSpawner PLA_CH_US_ART
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ars_d30
+ObjectTemplate.setObjectTemplate 2 ars_d30
+
+rem [ObjectSpawnerTemplate: arty2]
+ObjectTemplate.create ObjectSpawner arty2
+ObjectTemplate.activeSafe ObjectSpawner arty2
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ars_d30
+ObjectTemplate.setObjectTemplate 2 ars_d30
+
+rem [ObjectSpawnerTemplate: arty3]
+ObjectTemplate.create ObjectSpawner arty3
+ObjectTemplate.activeSafe ObjectSpawner arty3
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ars_d30
+ObjectTemplate.setObjectTemplate 2 ars_d30
+
+rem [ObjectSpawnerTemplate: arty4]
+ObjectTemplate.create ObjectSpawner arty4
+ObjectTemplate.activeSafe ObjectSpawner arty4
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.setObjectTemplate 1 ars_d30
+ObjectTemplate.setObjectTemplate 2 ars_d30
+
+if v_arg1 == host
+
+   rem [ObjectSpawner: AH1Z]
+   Object.create AH1Z
+   Object.absolutePosition 195.064/60.000/-287.604
+   Object.rotation 0.000/0.000/0.000
+   Object.setControlPointId 1
+   Object.layer 1
+
+   rem [ObjectSpawner: Z10]
+   Object.create Z10
+   Object.absolutePosition -227.028/70.045/163.504
+   Object.rotation 93.059/0.000/0.000
+   Object.setControlPointId 2
+   Object.layer 1
+
+   rem [ObjectSpawner: PLA_CH_US_ART]
+   Object.create PLA_CH_US_ART
+   Object.absolutePosition -237.666/77.035/-61.097
+   Object.rotation 93.755/0.000/0.000
+   Object.setControlPointId 2
+   Object.layer 1
+
+   rem [ObjectSpawner: arty2]
+   Object.create arty2
+   Object.absolutePosition -236.779/77.035/-52.969
+   Object.rotation 93.755/0.000/0.000
+   Object.setControlPointId 2
+   Object.layer 1
+
+   rem [ObjectSpawner: arty3]
+   Object.create arty3
+   Object.absolutePosition -234.924/77.035/-45.081
+   Object.rotation 93.755/0.000/0.000
+   Object.setControlPointId 2
+   Object.layer 1
+
+   rem [ObjectSpawner: arty4]
+   Object.create arty4
+   Object.absolutePosition -268.138/77.047/-34.397
+   Object.rotation 93.755/0.000/0.000
+   Object.setControlPointId 2
+   Object.layer 1
+
+endIf
+
+rem ********** Spawn Points **********
+rem [SpawnPointTemplate: USMC_1]
+ObjectTemplate.create SpawnPoint USMC_1
+ObjectTemplate.activeSafe SpawnPoint USMC_1
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: USMC_1]
+Object.create USMC_1
+Object.absolutePosition 198.752/60.000/-297.386
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_2]
+ObjectTemplate.create SpawnPoint USMC_2
+ObjectTemplate.activeSafe SpawnPoint USMC_2
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: USMC_2]
+Object.create USMC_2
+Object.absolutePosition 199.804/60.000/-294.215
+Object.rotation -42.381/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_3]
+ObjectTemplate.create SpawnPoint USMC_3
+ObjectTemplate.activeSafe SpawnPoint USMC_3
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_3]
+Object.create USMC_3
+Object.absolutePosition 197.215/60.000/-299.956
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_4]
+ObjectTemplate.create SpawnPoint USMC_4
+ObjectTemplate.activeSafe SpawnPoint USMC_4
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_4]
+Object.create USMC_4
+Object.absolutePosition 190.036/60.000/-296.372
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_5]
+ObjectTemplate.create SpawnPoint USMC_5
+ObjectTemplate.activeSafe SpawnPoint USMC_5
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_5]
+Object.create USMC_5
+Object.absolutePosition 203.198/60.000/-289.370
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_6]
+ObjectTemplate.create SpawnPoint USMC_6
+ObjectTemplate.activeSafe SpawnPoint USMC_6
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_6]
+Object.create USMC_6
+Object.absolutePosition 203.348/60.000/-293.795
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_7]
+ObjectTemplate.create SpawnPoint USMC_7
+ObjectTemplate.activeSafe SpawnPoint USMC_7
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_7]
+Object.create USMC_7
+Object.absolutePosition 193.164/60.000/-299.100
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: USMC_8]
+ObjectTemplate.create SpawnPoint USMC_8
+ObjectTemplate.activeSafe SpawnPoint USMC_8
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 1
+
+rem [SpawnPoint: USMC_8]
+Object.create USMC_8
+Object.absolutePosition 191.812/60.000/-302.248
+Object.rotation -32.651/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_1]
+ObjectTemplate.create SpawnPoint PLA_1
+ObjectTemplate.activeSafe SpawnPoint PLA_1
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: PLA_1]
+Object.create PLA_1
+Object.absolutePosition -231.238/70.045/159.267
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_2]
+ObjectTemplate.create SpawnPoint PLA_2
+ObjectTemplate.activeSafe SpawnPoint PLA_2
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+ObjectTemplate.setAllowSpawnCloseToVehicle 1
+
+rem [SpawnPoint: PLA_2]
+Object.create PLA_2
+Object.absolutePosition -228.929/70.045/167.610
+Object.rotation 127.222/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_3]
+ObjectTemplate.create SpawnPoint PLA_3
+ObjectTemplate.activeSafe SpawnPoint PLA_3
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_3]
+Object.create PLA_3
+Object.absolutePosition -232.778/70.045/169.039
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_4]
+ObjectTemplate.create SpawnPoint PLA_4
+ObjectTemplate.activeSafe SpawnPoint PLA_4
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_4]
+Object.create PLA_4
+Object.absolutePosition -234.942/70.045/158.824
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_5]
+ObjectTemplate.create SpawnPoint PLA_5
+ObjectTemplate.activeSafe SpawnPoint PLA_5
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_5]
+Object.create PLA_5
+Object.absolutePosition -223.851/70.045/168.474
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_6]
+ObjectTemplate.create SpawnPoint PLA_6
+ObjectTemplate.activeSafe SpawnPoint PLA_6
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_6]
+Object.create PLA_6
+Object.absolutePosition -226.311/70.045/158.126
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_7]
+ObjectTemplate.create SpawnPoint PLA_7
+ObjectTemplate.activeSafe SpawnPoint PLA_7
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_7]
+Object.create PLA_7
+Object.absolutePosition -235.057/70.045/167.658
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem [SpawnPointTemplate: PLA_8]
+ObjectTemplate.create SpawnPoint PLA_8
+ObjectTemplate.activeSafe SpawnPoint PLA_8
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.setSpawnPositionOffset 0/1.25/0
+ObjectTemplate.setControlPointId 2
+
+rem [SpawnPoint: PLA_8]
+Object.create PLA_8
+Object.absolutePosition -238.991/70.045/161.930
+Object.rotation 109.875/0.000/0.000
+Object.layer 1
+
+rem ********** Control Points **********
+rem [ControlPointTemplate: USMC]
+ObjectTemplate.create ControlPoint USMC
+ObjectTemplate.activeSafe ControlPoint USMC
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName USMC
+ObjectTemplate.radius 10
+ObjectTemplate.team 2
+ObjectTemplate.controlPointId 1
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+rem [ControlPointTemplate: PLA]
+ObjectTemplate.create ControlPoint PLA
+ObjectTemplate.activeSafe ControlPoint PLA
+ObjectTemplate.modifiedByUser "RussianGermanEnglish"
+ObjectTemplate.setNetworkableInfo ControlPointInfo
+ObjectTemplate.isNotSaveable 1
+ObjectTemplate.hasMobilePhysics 0
+ObjectTemplate.hasCollisionPhysics 1
+ObjectTemplate.physicsType Mesh
+rem -------------------------------------
+ObjectTemplate.addTemplate flagpole
+rem -------------------------------------
+ObjectTemplate.setControlPointName PLA
+ObjectTemplate.radius 10
+ObjectTemplate.team 1
+ObjectTemplate.controlPointId 2
+ObjectTemplate.hoistMinMax 0.2/0.9
+
+if v_arg1 == host
+
+   rem [ControlPoint: USMC]
+   Object.create USMC
+   Object.absolutePosition 206.490/60.000/-281.686
+   Object.layer 1
+
+   rem [ControlPoint: PLA]
+   Object.create PLA
+   Object.absolutePosition -205.875/70.045/150.098
+   Object.layer 1
+
+endIf
+
+CombatAreaManager.use 1
+CombatAreaManager.timeAllowedOutside 10.000000
+CombatArea.create CombatArea_0_Default
+CombatArea.min 0.000000/0.000000
+CombatArea.max 0.000000/0.000000
+CombatArea.addAreaPoint -298.010193/-421.833252
+CombatArea.addAreaPoint -392.216309/-238.784973
+CombatArea.addAreaPoint -388.011414/-18.083527
+CombatArea.addAreaPoint -346.449982/50.261780
+CombatArea.addAreaPoint -328.720062/221.665588
+CombatArea.addAreaPoint -218.721680/309.459534
+CombatArea.addAreaPoint -136.560272/353.194397
+CombatArea.addAreaPoint 36.070129/362.518921
+CombatArea.addAreaPoint 191.113464/377.921814
+CombatArea.addAreaPoint 296.364929/358.937073
+CombatArea.addAreaPoint 437.224792/271.600281
+CombatArea.addAreaPoint 477.296631/126.866089
+CombatArea.addAreaPoint 484.301697/-207.866211
+CombatArea.addAreaPoint 449.514893/-391.643555
+CombatArea.addAreaPoint 396.592041/-454.546539
+CombatArea.addAreaPoint 206.663574/-495.135010
+CombatArea.addAreaPoint -102.291840/-500.004822
+CombatArea.addAreaPoint -231.642761/-486.411346
+CombatArea.addAreaPoint -274.187500/-450.662659
+CombatArea.addAreaPoint -293.296021/-427.515411
+CombatArea.team 0
+CombatArea.vehicles 4
+CombatArea.layer 1
+

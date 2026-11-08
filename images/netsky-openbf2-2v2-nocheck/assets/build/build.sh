@@ -1,15 +1,15 @@
 #!/bin/sh
 set -e
 
-VOLUME='/home/bf2/srv'
 TMP='/home/bf2/tmp'
 
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
 MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
-OPENBF2_ZIP="$TMP/openbf2-bf2hub-ccf3099-7e37854-glibc-2.32.zip"
+OPENBF2_ZIP="$TMP/openbf2-serverext-824d4dc-c14b561-7e37854.zip"
 MAPS="$TMP/maps"
 LEVELS="$TMP/srv/mods/bf2/levels"
+TEMPLATES="$TMP/templates"
 
 # Get required packages
 apt -y update
@@ -45,14 +45,16 @@ tar -xvf $INSTALLER_TGZ -C $TMP
 chmod +x $INSTALLER ./extract
 ./extract
 
-# Replace the server binaries with OpenBF2
+# Replace the server binaries with OpenBF2 and add its modules libbf2hub.so (BF2Hub) and libserverext.so (the admin
+# channel to BF2WebAdmin). The zip's source.txt records the commits they were built from
 unzip -o $OPENBF2_ZIP -d "$TMP/srv/bin/amd-64"
+mv "$TMP/srv/bin/amd-64/source.txt" "$TMP/srv/openbf2-source.txt"
 
 # Move ModManager files into server directory
 unzip $MODMANAGER_ZIP -d "$TMP/srv"
 
-# Clean up unused folders (we have updated pb)
-rm -r $TMP/srv/pb_ia-32 $TMP/srv/bin/ia-32
+# Clean up unused folders, OpenBF2 has no PunkBuster
+rm -r $TMP/srv/pb_* $TMP/srv/bin/ia-32
 
 # Remove MD5 files on the NoCheck server to allow client modding
 rm -r $TMP/srv/mods/bf2/*.md5
@@ -90,8 +92,10 @@ cp -r "$TMP/bf2/." "$TMP/srv"
 # The server runs the demo hook directly
 chmod +x "$TMP/srv/adminutils/demo/rotate_demo.py"
 
-# Create empty server folder to copy our files into if it's empty on the host system
-mkdir -p $VOLUME
-chmod -R 700 $VOLUME/
+# Keep the settings as templates, run.sh renders them from the environment on every start
+for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/modmanager.con mods/bf2/settings/serversettings.con; do
+    mkdir -p "$TEMPLATES/$(dirname "$file")"
+    cp "$TMP/srv/$file" "$TEMPLATES/$file"
+done
 
 exit 0

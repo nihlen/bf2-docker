@@ -57,12 +57,89 @@ docker run --name bf2server -it -v <host directory>:/volume -e ENV_RCON_PASSWORD
 
 - [netsky-2v2](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2): 2v2 chopper server
 - [netsky-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-2v2-nocheck): 2v2 chopper server without PunkBuster and MD5 checks
-- [netsky-openbf2-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-2v2-nocheck): netsky-2v2-nocheck with the server binaries replaced by OpenBF2, an open source implementation. Uses `debian:trixie-slim` since OpenBF2 needs a newer glibc. OpenBF2 loads its own BF2Hub module from `mods/bf2/openbf2.con` (`openbf2.addModDll "bf2hub"`) instead of `start_bf2hub.sh`.
 - [netsky-chopper-mayhem](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-chopper-mayhem): Chopper mayhem on Dalian Plant
 - [netsky-dogfight](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-dogfight): Dogfight server
 - [netsky-inf](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-inf): Infantry server
 
 Images used for the NeTskY servers. Based on bf2hub-pb-mm-webadmin with custom settings and maps.
+
+### netsky-openbf2-*
+
+- [netsky-openbf2-2v2](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-2v2): netsky-2v2 on OpenBF2
+- [netsky-openbf2-2v2-nocheck](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-2v2-nocheck): netsky-2v2-nocheck on OpenBF2
+- [netsky-openbf2-chopper-mayhem](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-chopper-mayhem): netsky-chopper-mayhem on OpenBF2
+- [netsky-openbf2-dogfight](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-dogfight): netsky-dogfight on OpenBF2
+
+The netsky images above with the server binaries replaced by [OpenBF2](https://github.com/B2BF/OpenBF2), an open source implementation, plus two OpenBF2 modules: `libbf2hub.so` ([OpenBF2-BF2Hub](https://github.com/B2BF/OpenBF2-BF2Hub)) for BF2Hub, and `libserverext.so` (openbf2-server-ext), the admin channel that [BF2WebAdmin](https://github.com/nihlen/BF2WebAdmin) (branch `admin-channel`) uses instead of `mm_webadmin.py`. They keep the settings, maps and ModManager configuration of their netsky counterparts, except:
+
+- `mm_webadmin` is not loaded. ModManager with `mm_rcon` (4711) and `mm_iga` stays, BF2WebAdmin still uses RCON and `iga` for kicks, bans and the admin list.
+- `sv.punkBuster 0` and no PunkBuster files, OpenBF2 has no PunkBuster.
+- `debian:trixie-slim`, since OpenBF2 needs a newer glibc.
+
+The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.zip` (the three commits), built by `release/build.sh` in openbf2-server-ext and unpacked into `bin/amd-64`. Its `source.txt` is `/home/bf2/srv/openbf2-source.txt` in the image. `mods/bf2/openbf2.con` loads both modules before Python starts (`openbf2.addModDll "bf2hub"`, then `"serverext"`), so the server runs `start.sh` instead of `start_bf2hub.sh`.
+
+**Settings on every start.** The server files are part of the image and are not copied to a volume. `run.sh` renders the settings from templates (`/home/bf2/templates`) and the environment variables on every start, so a new image or a changed variable takes effect when the container is recreated. Don't edit settings in the container, change the image or the variables.
+
+| Variable | Default | |
+|---|---|---|
+| `ENV_SERVER_NAME` | `bf2-docker` | `sv.serverName` |
+| `ENV_MAX_PLAYERS` | `16` | `sv.maxPlayers` |
+| `ENV_SERVER_PORT` | `16567` | `sv.serverPort`, the game port (udp) |
+| `ENV_GAMESPY_PORT` | `29900` | `sv.gameSpyPort`, the query port (udp) |
+| `ENV_INTERNET` | `1` | `sv.internet`, 0 for a LAN server that is not listed on the master server |
+| `ENV_DEMOS_URL` | `http://example.com/demos/` | `sv.demoIndexURL` and `sv.demoDownloadURL` |
+| `ENV_RCON_PASSWORD` | random, printed in the log | ModManager RCON password (port 4711) |
+| `ENV_API_KEY` | random, printed in the log | `bf2tool.php` key |
+| `ENV_ADMIN_CONNECT` | none | BF2WebAdmin's admin channel listener, `<host>:<port>` (e.g. `bf2wa.nihlen.net:4300`). The module dials it over TLS |
+| `ENV_ADMIN_SERVER_ID` | none | The server's id in BF2WebAdmin (`Server.ServerId`, e.g. `<public ip>:<game port>`) |
+| `ENV_ADMIN_KEY` | none | The server's admin key in BF2WebAdmin (`Server.AdminKey`), 32 to 128 hex digits |
+| `ENV_ADMIN_CERT_SHA256` | none | The pin of BF2WebAdmin's certificate, 64 hex digits (`BF2WebAdmin.Server --admin-pin`, or the `adminCertSha256` line of `--admin-cert-create`) |
+| `ENV_TV_AIM_FROM_MISSILE` | `0` (off, retail) | OpenBF2 `vars.set tv-aim-from-missile`, metres: a TV missile's aim point that would make it stop turning (a wall beside it) is cast again from the server's missile when the client's camera is at most this far from it |
+| `ENV_TV_TURN_BEHIND` | `0` (off, retail) | OpenBF2 `vars.set tv-turn-behind`, 1: a TV missile keeps turning towards an aim point beside or behind it instead of flying straight |
+| `ENV_BOT_PORT` | `16700` | The module's bot channel, always on `127.0.0.1` inside the container. It has no authentication, never publish it |
+
+Set all four `ENV_ADMIN_*` variables or none. Without them the module dials nowhere (the log says `admin channel: off`), and `run.sh` refuses to start with only some of them. The module's other settings are fixed in the rendered `serverext.cfg`: `stepMode 0`, `allowTeleport 0`, `allowRoundRestart 0`, `adminAllowConsole 1`. The `ENV_BF2WEBADMIN_*` variables of the other netsky images are gone.
+
+**What persists.** Only `/volume`, mounted from the host or a named volume. `/home/bf2/srv` must not be mounted (a volume there would keep the server files of an older image), `run.sh` refuses to start if it is.
+
+| Path | |
+|---|---|
+| `/volume/settings/banlist.con` | BF2's ban list |
+| `/volume/settings/mm_bans.xml` | ModManager's ban list (`iga ban`) |
+| `/volume/demos/pending`, `/volume/demos/uploaded` | Demos being recorded, and the finished ones nginx serves at `/demos/` (`rotate_demo.py` keeps 50) |
+| `/volume/bf2.log`, `/volume/modmanager.log` | The server console and ModManager's log of this start, `.1` of the previous start |
+| `/volume/logs` | Module logs (`logs/bf2hub`) |
+
+`/volume/settings/maplist.con`, `modmanager.con` and `serversettings.con` are links to the rendered files in the container, for `bf2tool.php`. Changes through `bf2tool.php` last until the next start. An older `/volume` keeps its previous copies as `<file>.old`. The module's own log lines go to `docker logs`.
+
+```yaml
+services:
+  bf2-netsky-openbf2-2v2:
+    container_name: bf2-netsky-openbf2-2v2
+    image: cr.nihlen.net/library/bf2-netsky:openbf2-2v2
+    restart: on-failure
+    environment:
+      - ENV_SERVER_NAME=bf2-docker #1
+      - ENV_MAX_PLAYERS=16
+      - ENV_SERVER_PORT=16567
+      - ENV_GAMESPY_PORT=29900
+      - ENV_DEMOS_URL=http://www.example.com:8000/
+      - ENV_RCON_PASSWORD=rconpw123
+      - ENV_API_KEY=apikey123
+      - ENV_ADMIN_CONNECT=bf2wa.nihlen.net:4300
+      - ENV_ADMIN_SERVER_ID=203.0.113.10:16567
+      - ENV_ADMIN_KEY=<hex key from BF2WebAdmin>
+      - ENV_ADMIN_CERT_SHA256=<pin of BF2WebAdmin's certificate>
+    volumes:
+      - "/data/bf2/bf2-netsky-openbf2-2v2/volume:/volume"
+    ports:
+      - "8000:80/tcp"
+      - "4711:4711/tcp"
+      - "16567:16567/udp"
+      - "29900:29900/udp"
+```
+
+The zip is downloaded like the other assets (`assets.txt`, `assets.sha512`). A new zip must be uploaded to [static.nihlen.net/bf2/server](https://static.nihlen.net/bf2/server/) before CI can build the image; a local build uses a zip already placed in `assets/build/`.
 
 ### Custom maps
 

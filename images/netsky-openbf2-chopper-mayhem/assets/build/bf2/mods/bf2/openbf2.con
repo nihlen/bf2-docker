@@ -1,0 +1,7 @@
+rem Rendered by run.sh on every start, OpenBF2 runs it before Python starts
+rem bf2hub: BF2Hub for internet servers. serverext: the admin channel to BF2WebAdmin (serverext.cfg)
+openbf2.addModDll "bf2hub"
+openbf2.addModDll "serverext"
+rem OpenBF2 gameplay settings, 0 is retail (ENV_TV_AIM_FROM_MISSILE, ENV_TV_TURN_BEHIND)
+vars.set tv-aim-from-missile {{tv_aim_from_missile}}
+vars.set tv-turn-behind {{tv_turn_behind}}

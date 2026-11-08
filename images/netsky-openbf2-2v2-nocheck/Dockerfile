@@ -22,8 +22,10 @@ COPY ./assets/runtime ./
 # Install required packages and set permissions
 RUN bash -x ./setup.sh
 
-# Copy server files from the build stage
-COPY --from=build /home/bf2/tmp/srv ./srv
+# The server runs from the image, only /volume persists (see run.sh)
+COPY --from=build --chown=bf2:bf2 /home/bf2/tmp/srv /home/bf2/srv
+COPY --from=build --chown=bf2:bf2 /home/bf2/tmp/templates /home/bf2/templates
+WORKDIR /home/bf2
 
-# Move server files to persisted folder and start server
-CMD ./run.sh
+# Render the settings from the environment and start the server
+CMD ["./run.sh"]

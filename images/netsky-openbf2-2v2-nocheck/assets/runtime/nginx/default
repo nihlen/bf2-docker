@@ -5,7 +5,8 @@ server {
     listen [::]:80 default_server;
 
     # root /var/www/html;
-    root /volume/www;
+    # bf2tool.php, rendered by run.sh on every start
+    root /home/bf2/www;
 
     # Add index.php to the list if you are using PHP
     index index.html index.htm index.nginx-debian.html index.php;
@@ -26,7 +27,7 @@ server {
     }
 
     location ~ \.php$ {	
-        alias /volume/www/;
+        alias /home/bf2/www/;
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
     }
