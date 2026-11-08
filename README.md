@@ -74,6 +74,7 @@ The netsky images above with the server binaries replaced by [OpenBF2](https://g
 
 - `mm_webadmin` is not loaded. ModManager with `mm_rcon` (4711) and `mm_iga` stays, BF2WebAdmin still uses RCON and `iga` for kicks, bans and the admin list.
 - `sv.punkBuster 0` and no PunkBuster files, OpenBF2 has no PunkBuster.
+- No `bf2tool.php` and no PHP (`ENV_API_KEY` is gone). nginx only serves the demos at `/demos/`.
 - `debian:trixie-slim`, since OpenBF2 needs a newer glibc.
 
 The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.zip` (the three commits), built by `release/build.sh` in openbf2-server-ext and unpacked into `bin/amd-64`. Its `source.txt` is `/home/bf2/srv/openbf2-source.txt` in the image. `mods/bf2/openbf2.con` loads both modules before Python starts (`openbf2.addModDll "bf2hub"`, then `"serverext"`), so the server runs `start.sh` instead of `start_bf2hub.sh`.
@@ -89,7 +90,6 @@ The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.z
 | `ENV_INTERNET` | `1` | `sv.internet`, 0 for a LAN server that is not listed on the master server |
 | `ENV_DEMOS_URL` | `http://example.com/demos/` | `sv.demoIndexURL` and `sv.demoDownloadURL` |
 | `ENV_RCON_PASSWORD` | random, printed in the log | ModManager RCON password (port 4711) |
-| `ENV_API_KEY` | random, printed in the log | `bf2tool.php` key |
 | `ENV_ADMIN_CONNECT` | none | BF2WebAdmin's admin channel listener, `<host>:<port>` (e.g. `bf2wa.nihlen.net:4300`). The module dials it over TLS |
 | `ENV_ADMIN_SERVER_ID` | none | The server's id in BF2WebAdmin (`Server.ServerId`, e.g. `<public ip>:<game port>`) |
 | `ENV_ADMIN_KEY` | none | The server's admin key in BF2WebAdmin (`Server.AdminKey`), 32 to 128 hex digits |
@@ -110,7 +110,7 @@ Set all four `ENV_ADMIN_*` variables or none. Without them the module dials nowh
 | `/volume/bf2.log`, `/volume/modmanager.log` | The server console and ModManager's log of this start, `.1` of the previous start |
 | `/volume/logs` | Module logs (`logs/bf2hub`) |
 
-`/volume/settings/maplist.con`, `modmanager.con` and `serversettings.con` are links to the rendered files in the container, for `bf2tool.php`. Changes through `bf2tool.php` last until the next start. An older `/volume` keeps its previous copies as `<file>.old`. The module's own log lines go to `docker logs`.
+The rendered settings are not in `/volume`. An older `/volume` keeps its previous copies of `maplist.con`, `modmanager.con` and `serversettings.con` as `<file>.old`, and the links to the rendered files that an earlier image of these made there for `bf2tool.php` are removed. The module's own log lines go to `docker logs`.
 
 ```yaml
 services:
@@ -126,7 +126,6 @@ services:
       - ENV_GAMESPY_PORT=29900
       - ENV_DEMOS_URL=http://www.example.com:8000/
       - ENV_RCON_PASSWORD=rconpw123
-      - ENV_API_KEY=apikey123
       - ENV_ADMIN_CONNECT=bf2wa.nihlen.net:4300
       - ENV_ADMIN_SERVER_ID=203.0.113.10:16567
       - ENV_ADMIN_KEY=<hex key from BF2WebAdmin>

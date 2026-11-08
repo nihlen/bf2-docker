@@ -15,7 +15,6 @@ set -e
 SRV='/home/bf2/srv'
 SETTINGS="$SRV/mods/bf2/settings"
 TEMPLATES='/home/bf2/templates'
-WWW='/home/bf2/www'
 VOLUME='/volume'
 
 fail() {
@@ -57,7 +56,6 @@ GAMESPY_PORT="${ENV_GAMESPY_PORT:-29900}"
 INTERNET="${ENV_INTERNET:-1}"
 DEMOS_URL="${ENV_DEMOS_URL:-http://example.com/demos/}"
 RCON_PASSWORD="${ENV_RCON_PASSWORD:-$(generate_pw)}"
-API_KEY="${ENV_API_KEY:-$(generate_pw)}"
 BOT_PORT="${ENV_BOT_PORT:-16700}"
 TV_AIM_FROM_MISSILE="${ENV_TV_AIM_FROM_MISSILE:-0}"
 TV_TURN_BEHIND="${ENV_TV_TURN_BEHIND:-0}"
@@ -101,13 +99,13 @@ fi
 echo 'Linking the persisted state in /volume...'
 mkdir -p "$VOLUME/settings" "$VOLUME/demos/pending" "$VOLUME/demos/uploaded" "$VOLUME/logs"
 chmod 777 "$VOLUME" "$VOLUME/settings" "$VOLUME/demos" "$VOLUME/demos/pending" "$VOLUME/demos/uploaded" "$VOLUME/logs"
-# bf2tool.php (www-data) reads and writes the ban lists too. The server would create banlist.con readable by bf2 only
+# The server and ModManager (bf2) write the ban lists. An older image let bf2tool.php (www-data) write them too
 if [ ! -e "$VOLUME/settings/banlist.con" ]; then
-    install -o bf2 -g bf2 -m 666 /dev/null "$VOLUME/settings/banlist.con"
+    install -o bf2 -g bf2 -m 644 /dev/null "$VOLUME/settings/banlist.con"
 fi
 for file in banlist.con mm_bans.xml; do
     if [ -f "$VOLUME/settings/$file" ]; then
-        chmod 666 "$VOLUME/settings/$file"
+        chown bf2:bf2 "$VOLUME/settings/$file"
     fi
 done
 for file in bf2.log modmanager.log; do
@@ -129,7 +127,6 @@ echo 'Rendering the settings...'
 for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/modmanager.con mods/bf2/settings/serversettings.con; do
     install -o bf2 -g bf2 -m 666 "$TEMPLATES/$file" "$SRV/$file"
 done
-install -o bf2 -g bf2 -m 644 "$TEMPLATES/www/bf2tool.php" "$WWW/bf2tool.php"
 replace_var "$SETTINGS/serversettings.con" server_name "$SERVER_NAME"
 replace_var "$SETTINGS/serversettings.con" max_players "$MAX_PLAYERS"
 replace_var "$SETTINGS/serversettings.con" server_port "$SERVER_PORT"
@@ -139,19 +136,19 @@ replace_var "$SETTINGS/serversettings.con" demos_url "$DEMOS_URL"
 replace_var "$SETTINGS/modmanager.con" rcon_password "$RCON_PASSWORD"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_aim_from_missile "$TV_AIM_FROM_MISSILE"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_turn_behind "$TV_TURN_BEHIND"
-replace_var "$WWW/bf2tool.php" api_key "$API_KEY"
-if grep -l '{{' "$SRV/mods/bf2/openbf2.con" "$SETTINGS/maplist.con" "$SETTINGS/modmanager.con" "$SETTINGS/serversettings.con" "$WWW/bf2tool.php"; then
+if grep -l '{{' "$SRV/mods/bf2/openbf2.con" "$SETTINGS/maplist.con" "$SETTINGS/modmanager.con" "$SETTINGS/serversettings.con"; then
     fail 'placeholders left in the files above'
 fi
 
-# bf2tool.php reads and writes the settings in /volume/settings. The rendered ones are links into the server
-# (changes through bf2tool.php last until the next start), the ban lists are the persisted files
+# The rendered settings are not kept in /volume, the image is the source
 for file in maplist.con modmanager.con serversettings.con; do
-    if [ -f "$VOLUME/settings/$file" ] && [ ! -L "$VOLUME/settings/$file" ]; then
-        # Left by an image that kept all settings in /volume, the image is the source now
+    if [ -L "$VOLUME/settings/$file" ]; then
+        # A link to the rendered file, made by an older image for bf2tool.php
+        rm -f "$VOLUME/settings/$file"
+    elif [ -f "$VOLUME/settings/$file" ]; then
+        # Left by an image that kept all settings in /volume
         mv -f "$VOLUME/settings/$file" "$VOLUME/settings/$file.old"
     fi
-    ln -sfn "$SETTINGS/$file" "$VOLUME/settings/$file"
 done
 
 # The module's configuration (libserverext.so, loaded from openbf2.con). The bot channel cannot be turned off, so it
@@ -177,9 +174,6 @@ echo "Server '$SERVER_NAME': game port $SERVER_PORT/udp, query port $GAMESPY_POR
 if [ -z "$ENV_RCON_PASSWORD" ]; then
     echo "RCON password (random, ENV_RCON_PASSWORD is not set): $RCON_PASSWORD"
 fi
-if [ -z "$ENV_API_KEY" ]; then
-    echo "bf2tool.php API key (random, ENV_API_KEY is not set): $API_KEY"
-fi
 if [ "$ADMIN" = 1 ]; then
     echo "Admin channel: dials $ENV_ADMIN_CONNECT as $ENV_ADMIN_SERVER_ID"
 else
@@ -188,9 +182,8 @@ fi
 echo "OpenBF2: tv-aim-from-missile $TV_AIM_FROM_MISSILE, tv-turn-behind $TV_TURN_BEHIND, bot channel 127.0.0.1:$BOT_PORT"
 sed -n 's/^\(openbf2\|module\|bf2hub\) /Built from \1 /p' "$SRV/openbf2-source.txt"
 
-# Start nginx and php
+# Start nginx, it serves the demos
 service nginx start
-service php8.4-fpm start
 
 # Start Battlefield 2 server as the bf2 user
 # start.sh instead of start_bf2hub.sh, OpenBF2 loads its own libbf2hub.so from mods/bf2/openbf2.con

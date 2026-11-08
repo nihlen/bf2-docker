@@ -1,17 +1,14 @@
-# Default nginx server configuration
-#
+# nginx serves the finished demos (rotate_demo.py moves them to /volume/demos/uploaded) for sv.demoIndexURL and
+# sv.demoDownloadURL, nothing else
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
 
-    # root /var/www/html;
-    # bf2tool.php, rendered by run.sh on every start
-    root /home/bf2/www;
-
-    # Add index.php to the list if you are using PHP
-    index index.html index.htm index.nginx-debian.html index.php;
-
     server_name _;
+
+    location / {
+        return 404;
+    }
 
     location /demos/ {
         # First attempt to serve request as file, then
@@ -24,11 +21,5 @@ server {
 
     location ~ ([^\/]+\.bf2demo)$ {
         alias /volume/demos/uploaded/$1;
-    }
-
-    location ~ \.php$ {	
-        alias /home/bf2/www/;
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.4-fpm.sock;
     }
 }
