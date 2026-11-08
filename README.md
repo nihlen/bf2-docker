@@ -97,6 +97,7 @@ The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.z
 | `ENV_TV_AIM_FROM_MISSILE` | `0` (off, retail) | OpenBF2 `vars.set tv-aim-from-missile`, metres: a TV missile's aim point that would make it stop turning (a wall beside it) is cast again from the server's missile when the client's camera is at most this far from it |
 | `ENV_TV_TURN_BEHIND` | `0` (off, retail) | OpenBF2 `vars.set tv-turn-behind`, 1: a TV missile keeps turning towards an aim point beside or behind it instead of flying straight |
 | `ENV_BOT_PORT` | `16700` | The module's bot channel, always on `127.0.0.1` inside the container. It has no authentication, never publish it |
+| `ENV_SPONSOR_VARS` | `website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com` | [sponsortext](https://github.com/cetteup/sponsortext) variables, added as ` $vars:<value>$` after the image's description in `sv.sponsorText`, which server browsers read from the GameSpy query. `key=value` pairs separated by `;` (escape `=`, `;`, `$` and `\` in a value with `\`); no double quotes. Set but empty: no variables |
 
 Set all four `ENV_ADMIN_*` variables or none. Without them the module dials nowhere (the log says `admin channel: off`), and `run.sh` refuses to start with only some of them. The module's other settings are fixed in the rendered `serverext.cfg`: `stepMode 0`, `allowTeleport 0`, `allowRoundRestart 0`, `adminAllowConsole 1`. The `ENV_BF2WEBADMIN_*` variables of the other netsky images are gone.
 

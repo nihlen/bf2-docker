@@ -53,7 +53,7 @@ sv.voipBFServerPort 55124
 sv.voipSharedPassword "voipsekk"
 sv.useGlobalRank 0
 sv.useGlobalUnlocks 1
-sv.sponsorText "2v2 chopper server located in Frankfurt, Germany."
+sv.sponsorText "Dogfight server located in Frankfurt, Germany.{{sponsor_vars}}"
 sv.sponsorLogoURL "http://static.nihlen.net/bf2/61761115-server.jpg"
 sv.communityLogoURL "http://static.nihlen.net/bf2/61761115-server.jpg"
 sv.radioSpamInterval 10000

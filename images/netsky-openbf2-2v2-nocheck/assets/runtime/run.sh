@@ -59,6 +59,9 @@ RCON_PASSWORD="${ENV_RCON_PASSWORD:-$(generate_pw)}"
 BOT_PORT="${ENV_BOT_PORT:-16700}"
 TV_AIM_FROM_MISSILE="${ENV_TV_AIM_FROM_MISSILE:-0}"
 TV_TURN_BEHIND="${ENV_TV_TURN_BEHIND:-0}"
+# sponsortext variables (https://github.com/cetteup/sponsortext) after the description in sv.sponsorText, read by
+# server browsers from the GameSpy query. Unset: the defaults below; set but empty: none
+SPONSOR_VARS="${ENV_SPONSOR_VARS-website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com}"
 
 is_uint "$MAX_PLAYERS" || fail "ENV_MAX_PLAYERS must be a number, got '$MAX_PLAYERS'"
 is_port "$SERVER_PORT" || fail "ENV_SERVER_PORT must be a port, got '$SERVER_PORT'"
@@ -67,6 +70,8 @@ case "$INTERNET" in 0|1) ;; *) fail "ENV_INTERNET must be 0 or 1, got '$INTERNET
 is_port "$BOT_PORT" && [ "$BOT_PORT" != 16567 ] || fail "ENV_BOT_PORT must be a port other than 16567, got '$BOT_PORT'"
 is_decimal "$TV_AIM_FROM_MISSILE" || fail "ENV_TV_AIM_FROM_MISSILE must be metres (0 or more, e.g. 30 or 7.5), got '$TV_AIM_FROM_MISSILE'"
 is_uint "$TV_TURN_BEHIND" || fail "ENV_TV_TURN_BEHIND must be 0 (off) or 1 (on), got '$TV_TURN_BEHIND'"
+case "$SPONSOR_VARS" in *'"'*|*'
+'*) fail 'ENV_SPONSOR_VARS must not contain double quotes or line breaks' ;; esac
 
 # The admin channel to BF2WebAdmin: all four variables or none (then the module dials nowhere)
 case "${ENV_ADMIN_CONNECT:+c}${ENV_ADMIN_SERVER_ID:+s}${ENV_ADMIN_KEY:+k}${ENV_ADMIN_CERT_SHA256:+p}" in
@@ -133,6 +138,7 @@ replace_var "$SETTINGS/serversettings.con" server_port "$SERVER_PORT"
 replace_var "$SETTINGS/serversettings.con" gamespy_port "$GAMESPY_PORT"
 replace_var "$SETTINGS/serversettings.con" internet "$INTERNET"
 replace_var "$SETTINGS/serversettings.con" demos_url "$DEMOS_URL"
+replace_var "$SETTINGS/serversettings.con" sponsor_vars "${SPONSOR_VARS:+ \$vars:$SPONSOR_VARS\$}"
 replace_var "$SETTINGS/modmanager.con" rcon_password "$RCON_PASSWORD"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_aim_from_missile "$TV_AIM_FROM_MISSILE"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_turn_behind "$TV_TURN_BEHIND"

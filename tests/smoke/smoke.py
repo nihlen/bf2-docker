@@ -168,6 +168,13 @@ def run_checks(image, container, rcon_password, api_key):
         name = rcon.command("exec sv.serverName").strip()
         check(results, "server name set from ENV_SERVER_NAME", name == SERVER_NAME, "got '%s'" % name)
 
+        # sponsortext variables in sv.sponsorText (netsky-openbf2-*): the $ and ; must survive the settings file
+        settings = os.path.join(build, "bf2", "mods", "bf2", "settings", "serversettings.con")
+        if os.path.isfile(settings) and "{{sponsor_vars}}" in open(settings, encoding="utf-8").read():
+            sponsor = rcon.command("exec sv.sponsorText").strip()
+            expected = "$vars:website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com$"
+            check(results, "sponsortext variables in sv.sponsorText", sponsor.endswith(" " + expected), "got '%s'" % sponsor)
+
         maplist = rcon.command("exec maplist.list")
         expected_maps = config_values(container, SRV + "/mods/bf2/settings/maplist.con", r"^\s*maplist\.append\s+(\S+)")
         missing = [m for m in expected_maps if '"%s"' % m not in maplist and " %s " % m not in maplist]
