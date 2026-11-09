@@ -6,8 +6,11 @@ Usage: python tests/smoke/smoke.py <image folder> <docker image tag>
 Checks, depending on what the image contains:
 - the bf2 process starts and the game port is open
 - OpenBF2 loads the modules listed in mods/bf2/openbf2.con
-- RCON login works through ModManager, the server name is set from ENV_SERVER_NAME,
+- the image's own admin script (sv.adminScript, admin/<name>.py) loads without errors
+- with ModManager: RCON login works, the server name is set from ENV_SERVER_NAME,
   and the maps in maplist.con and the modules in modmanager.con are loaded
+- with an admin script instead of ModManager: nothing listens on the RCON port, and the GameSpy query reports
+  the server name from ENV_SERVER_NAME, the sponsortext variables and the first map in maplist.con
 - the demo hook moves a demo to the web server, where it is listed and downloadable
 - bf2tool.php returns the settings with the API key and refuses without it
 - the container keeps running
@@ -26,8 +29,13 @@ import urllib.request
 
 SRV = "/home/bf2/srv"
 GAME_PORT = 16567
+QUERY_PORT = 29900
+RCON_PORT = 4711
 STARTUP_TIMEOUT = 300
 SERVER_NAME = "bf2-docker smoke test"
+SPONSOR_VARS = "$vars:website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com$"
+# What OpenBF2 writes when an admin script fails to load, or its update() fails
+ADMIN_ERRORS = r"admin: (failed to import|\S+: you must provide the functions|\S+: init function failed)|error: admin update failed"
 
 
 class SmokeTestError(Exception):
@@ -68,8 +76,17 @@ def udp_port_open(container, port):
     return (":%04X " % port) in container_exec(container, "cat /proc/net/udp /proc/net/udp6 2>/dev/null")
 
 
-def host_port(container, port):
-    address = docker("port", container, "%d/tcp" % port).splitlines()[0]
+def tcp_port_listening(container, port):
+    # /proc/net/tcp lists local addresses as <hex ip>:<hex port>, state 0A is LISTEN
+    for line in container_exec(container, "cat /proc/net/tcp /proc/net/tcp6 2>/dev/null").splitlines():
+        fields = line.split()
+        if len(fields) > 3 and fields[1].endswith(":%04X" % port) and fields[3] == "0A":
+            return True
+    return False
+
+
+def host_port(container, port, protocol="tcp"):
+    address = docker("port", container, "%d/%s" % (port, protocol)).splitlines()[0]
     host, _, mapped = address.rpartition(":")
     return host, int(mapped)
 
@@ -106,6 +123,24 @@ class Rcon:
         self.sock.close()
 
 
+def gamespy_query(address):
+    """The server keys from the GameSpy (v3) query port, or None if it doesn't answer."""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.settimeout(3)
+    try:
+        # 0xFE 0xFD, type 0 (query), a 4 byte id, then: all server keys, no players, no teams
+        sock.sendto(b"\xfe\xfd\x00smok\xff\x00\x00", address)
+        data = sock.recv(65535)
+    except OSError:
+        return None
+    finally:
+        sock.close()
+    if not data.startswith(b"\x00smok"):
+        return None
+    fields = data[5:].decode("utf-8", errors="replace").split("\x00")
+    return dict(zip(fields[0::2], fields[1::2]))
+
+
 def connect_rcon(address, password):
     try:
         return Rcon(address, password)
@@ -139,6 +174,12 @@ def run_checks(image, container, rcon_password, api_key):
     runtime = os.path.join(image, "assets", "runtime")
     with open(os.path.join(build, "assets.txt"), encoding="utf-8") as f:
         has_modmanager = "ModManager" in f.read()
+    settings = os.path.join(build, "bf2", "mods", "bf2", "settings", "serversettings.con")
+    settings_text = open(settings, encoding="utf-8").read() if os.path.isfile(settings) else ""
+    has_sponsor_vars = "{{sponsor_vars}}" in settings_text
+    # The image's own admin script, admin/<name>.py (not ModManager's, which comes from its zip)
+    match = re.search(r'^\s*sv\.adminScript\s+"?(\w+)', settings_text, re.IGNORECASE | re.MULTILINE)
+    admin_script = match.group(1) if match and os.path.isfile(os.path.join(build, "bf2", "admin", match.group(1) + ".py")) else None
     has_nginx = os.path.isdir(os.path.join(runtime, "nginx"))
     has_bf2tool = os.path.isfile(os.path.join(runtime, "www", "bf2tool.php"))
     has_demo_hook = os.path.isfile(os.path.join(build, "bf2", "adminutils", "demo", "rotate_demo.py"))
@@ -161,19 +202,22 @@ def run_checks(image, container, rcon_password, api_key):
             check(results, "OpenBF2 loaded module %s" % module, bool(loaded),
                   error.group(0) if error else "no load message on the console")
 
+    # The admin script writes "<name>: admin script loaded" to the console at the end of init(), and
+    # "<name>: <handler> failed: <traceback>" if one of its handlers fails
+    if admin_script:
+        loaded_line = "%s: admin script loaded" % admin_script
+        console = lambda: container_exec(container, "cat %s/bf2.log" % SRV)
+        wait_for("the admin script", lambda: loaded_line in console(), container, timeout=60)
+        check(results, "admin script %s loaded" % admin_script, True)
+        error = re.search(r"(%s|%s: \w+ failed: ).*" % (ADMIN_ERRORS, re.escape(admin_script)), console())
+        check(results, "no admin script errors on the console", not error, error.group(0)[:200] if error else "")
+
     if has_modmanager:
         rcon = wait_for("RCON login", lambda: connect_rcon(host_port(container, 4711), rcon_password), container)
         check(results, "RCON login", True)
 
         name = rcon.command("exec sv.serverName").strip()
         check(results, "server name set from ENV_SERVER_NAME", name == SERVER_NAME, "got '%s'" % name)
-
-        # sponsortext variables in sv.sponsorText (netsky-openbf2-*): the $ and ; must survive the settings file
-        settings = os.path.join(build, "bf2", "mods", "bf2", "settings", "serversettings.con")
-        if os.path.isfile(settings) and "{{sponsor_vars}}" in open(settings, encoding="utf-8").read():
-            sponsor = rcon.command("exec sv.sponsorText").strip()
-            expected = "$vars:website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com$"
-            check(results, "sponsortext variables in sv.sponsorText", sponsor.endswith(" " + expected), "got '%s'" % sponsor)
 
         maplist = rcon.command("exec maplist.list")
         expected_maps = config_values(container, SRV + "/mods/bf2/settings/maplist.con", r"^\s*maplist\.append\s+(\S+)")
@@ -186,6 +230,26 @@ def run_checks(image, container, rcon_password, api_key):
         missing = [m for m in expected_modules if m not in modules]
         check(results, "%d ModManager modules loaded" % len(expected_modules), not missing, "missing %s" % ", ".join(missing))
         rcon.close()
+    elif admin_script:
+        # The image's admin script instead of ModManager, so no RCON: the settings are checked through the GameSpy
+        # query, which server browsers read
+        check(results, "nothing listens on the RCON port %d" % RCON_PORT, not tcp_port_listening(container, RCON_PORT))
+
+        query = wait_for("the GameSpy query", lambda: gamespy_query(host_port(container, QUERY_PORT, "udp")), container, timeout=60)
+        check(results, "GameSpy query answers", True)
+        hostname = query.get("hostname")
+        check(results, "server name set from ENV_SERVER_NAME", hostname == SERVER_NAME, "got '%s'" % hostname)
+
+        # sponsortext variables in sv.sponsorText (netsky-openbf2-*): the $ and ; must survive the settings file
+        if has_sponsor_vars:
+            sponsor = query.get("bf2_sponsortext", "")
+            check(results, "sponsortext variables in sv.sponsorText", sponsor.endswith(" " + SPONSOR_VARS), "got '%s'" % sponsor)
+
+        # The server starts with the first map in maplist.con. The query has the map's name with spaces (dalian plant)
+        maps = config_values(container, SRV + "/mods/bf2/settings/maplist.con", r"^\s*maplist\.append\s+(\S+)\s+(\S+)")
+        expected = " ".join(maps[0]).lower() if maps else "a map in maplist.con"
+        running = ("%s %s" % (query.get("mapname", "").replace(" ", "_"), query.get("gametype", ""))).lower()
+        check(results, "first map in maplist.con running", running == expected, "got '%s', expected '%s'" % (running, expected))
 
     if has_nginx:
         web = host_port(container, 80)
@@ -229,7 +293,7 @@ def main(image, tag):
            "-e", "ENV_RCON_PASSWORD=" + rcon_password,
            "-e", "ENV_BF2CCD_PASSWORD=" + secrets.token_hex(8),
            "-e", "ENV_API_KEY=" + api_key,
-           "-p", "127.0.0.1::4711/tcp", "-p", "127.0.0.1::80/tcp",
+           "-p", "127.0.0.1::%d/tcp" % RCON_PORT, "-p", "127.0.0.1::80/tcp", "-p", "127.0.0.1::%d/udp" % QUERY_PORT,
            tag)
     try:
         results = run_checks(image, name, rcon_password, api_key)

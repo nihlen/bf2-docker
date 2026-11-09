@@ -39,7 +39,7 @@ sv.demoIndexURL {{demos_url}}
 sv.demoDownloadURL {{demos_url}}
 sv.autoDemoHook "adminutils/demo/rotate_demo.py"
 sv.demoQuality 10
-sv.adminScript "modmanager"
+sv.adminScript "netsky"
 sv.timeBeforeRestartMap 5
 sv.autoBalanceTeam 0
 sv.teamRatioPercent 100

@@ -40,7 +40,9 @@ Starts each image (building it first if needed) with test passwords and checks t
 
 - The `bf2` process starts and the game port (16567/udp) is open.
 - OpenBF2 loads every module listed in `mods/bf2/openbf2.con` (checked on the server console).
-- ModManager RCON accepts a login, the server name is set from `ENV_SERVER_NAME`, and all maps in `maplist.con` and modules in `modmanager.con` are loaded.
+- An admin script of the image's own (`sv.adminScript`, `admin/<name>.py`, e.g. `netsky.py`) writes `<name>: admin script loaded` on the server console, and the console has no admin script errors.
+- With ModManager: RCON accepts a login, the server name is set from `ENV_SERVER_NAME`, and all maps in `maplist.con` and modules in `modmanager.con` are loaded.
+- With an admin script instead of ModManager: nothing listens on the RCON port, and the GameSpy query (29900/udp) reports the server name from `ENV_SERVER_NAME`, the sponsortext variables in `sv.sponsorText` and the first map in `maplist.con`.
 - nginx serves the demo list at `/demos/`.
 - The demo hook runs like the server runs it after a round, and the demo is then listed and downloadable.
 - `bf2tool.php` returns the settings with the API key and refuses a wrong key.

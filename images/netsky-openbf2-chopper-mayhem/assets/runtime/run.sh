@@ -4,11 +4,9 @@
 # and the environment, and only the state below is kept in /volume (mount it to keep the state; nothing else needs
 # a mount, and /home/bf2/srv must not be mounted):
 #   /volume/settings/banlist.con     BF2's ban list
-#   /volume/settings/mm_bans.xml     ModManager's ban list (iga ban)
 #   /volume/demos/pending            demos being recorded (mods/bf2/demos)
 #   /volume/demos/uploaded           finished demos, served by nginx at /demos/ (rotate_demo.py keeps 50)
 #   /volume/bf2.log                  the server console of this start (bf2.log.1: the previous start)
-#   /volume/modmanager.log           ModManager's log of this start (modmanager.log.1: the previous start)
 #   /volume/logs                     module logs (logs/bf2hub)
 set -e
 
@@ -20,10 +18,6 @@ VOLUME='/volume'
 fail() {
     echo "run.sh: $*" >&2
     exit 1
-}
-
-generate_pw() {
-    tr -dc '_A-Za-z0-9-' < /dev/urandom | head -c 16
 }
 
 is_uint() {
@@ -55,7 +49,6 @@ SERVER_PORT="${ENV_SERVER_PORT:-16567}"
 GAMESPY_PORT="${ENV_GAMESPY_PORT:-29900}"
 INTERNET="${ENV_INTERNET:-1}"
 DEMOS_URL="${ENV_DEMOS_URL:-http://example.com/demos/}"
-RCON_PASSWORD="${ENV_RCON_PASSWORD:-$(generate_pw)}"
 BOT_PORT="${ENV_BOT_PORT:-16700}"
 TV_AIM_FROM_MISSILE="${ENV_TV_AIM_FROM_MISSILE:-0}"
 TV_TURN_BEHIND="${ENV_TV_TURN_BEHIND:-0}"
@@ -104,32 +97,26 @@ fi
 echo 'Linking the persisted state in /volume...'
 mkdir -p "$VOLUME/settings" "$VOLUME/demos/pending" "$VOLUME/demos/uploaded" "$VOLUME/logs"
 chmod 777 "$VOLUME" "$VOLUME/settings" "$VOLUME/demos" "$VOLUME/demos/pending" "$VOLUME/demos/uploaded" "$VOLUME/logs"
-# The server and ModManager (bf2) write the ban lists. An older image let bf2tool.php (www-data) write them too
+# The server (bf2) writes the ban list. An older image let bf2tool.php (www-data) write it too
 if [ ! -e "$VOLUME/settings/banlist.con" ]; then
     install -o bf2 -g bf2 -m 644 /dev/null "$VOLUME/settings/banlist.con"
 fi
-for file in banlist.con mm_bans.xml; do
-    if [ -f "$VOLUME/settings/$file" ]; then
-        chown bf2:bf2 "$VOLUME/settings/$file"
-    fi
-done
-for file in bf2.log modmanager.log; do
-    if [ -f "$VOLUME/$file" ]; then
-        mv -f "$VOLUME/$file" "$VOLUME/$file.1"
-    fi
-    install -m 666 /dev/null "$VOLUME/$file"
-done
-rm -rf "$SETTINGS/banlist.con" "$SETTINGS/mm_bans.xml" "$SRV/mods/bf2/demos" "$SRV/logs" "$SRV/bf2.log" "$SRV/modmanager.log"
+if [ -f "$VOLUME/settings/banlist.con" ]; then
+    chown bf2:bf2 "$VOLUME/settings/banlist.con"
+fi
+if [ -f "$VOLUME/bf2.log" ]; then
+    mv -f "$VOLUME/bf2.log" "$VOLUME/bf2.log.1"
+fi
+install -m 666 /dev/null "$VOLUME/bf2.log"
+rm -rf "$SETTINGS/banlist.con" "$SRV/mods/bf2/demos" "$SRV/logs" "$SRV/bf2.log"
 ln -s "$VOLUME/settings/banlist.con" "$SETTINGS/banlist.con"
-ln -s "$VOLUME/settings/mm_bans.xml" "$SETTINGS/mm_bans.xml"
 ln -s "$VOLUME/demos/pending" "$SRV/mods/bf2/demos"
 ln -s "$VOLUME/logs" "$SRV/logs"
 ln -s "$VOLUME/bf2.log" "$SRV/bf2.log"
-ln -s "$VOLUME/modmanager.log" "$SRV/modmanager.log"
 
 # Render the settings from the templates and the environment
 echo 'Rendering the settings...'
-for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/modmanager.con mods/bf2/settings/serversettings.con; do
+for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/serversettings.con; do
     install -o bf2 -g bf2 -m 666 "$TEMPLATES/$file" "$SRV/$file"
 done
 replace_var "$SETTINGS/serversettings.con" server_name "$SERVER_NAME"
@@ -139,14 +126,14 @@ replace_var "$SETTINGS/serversettings.con" gamespy_port "$GAMESPY_PORT"
 replace_var "$SETTINGS/serversettings.con" internet "$INTERNET"
 replace_var "$SETTINGS/serversettings.con" demos_url "$DEMOS_URL"
 replace_var "$SETTINGS/serversettings.con" sponsor_vars "${SPONSOR_VARS:+ \$vars:$SPONSOR_VARS\$}"
-replace_var "$SETTINGS/modmanager.con" rcon_password "$RCON_PASSWORD"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_aim_from_missile "$TV_AIM_FROM_MISSILE"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_turn_behind "$TV_TURN_BEHIND"
-if grep -l '{{' "$SRV/mods/bf2/openbf2.con" "$SETTINGS/maplist.con" "$SETTINGS/modmanager.con" "$SETTINGS/serversettings.con"; then
+if grep -l '{{' "$SRV/mods/bf2/openbf2.con" "$SETTINGS/maplist.con" "$SETTINGS/serversettings.con"; then
     fail 'placeholders left in the files above'
 fi
 
-# The rendered settings are not kept in /volume, the image is the source
+# The rendered settings are not kept in /volume, the image is the source (modmanager.con is from the images with
+# ModManager, before admin/netsky.py)
 for file in maplist.con modmanager.con serversettings.con; do
     if [ -L "$VOLUME/settings/$file" ]; then
         # A link to the rendered file, made by an older image for bf2tool.php
@@ -177,9 +164,6 @@ chown bf2:bf2 "$SRV/serverext.cfg"
 chmod 600 "$SRV/serverext.cfg"
 
 echo "Server '$SERVER_NAME': game port $SERVER_PORT/udp, query port $GAMESPY_PORT/udp, internet $INTERNET, $MAX_PLAYERS players, demos $DEMOS_URL"
-if [ -z "$ENV_RCON_PASSWORD" ]; then
-    echo "RCON password (random, ENV_RCON_PASSWORD is not set): $RCON_PASSWORD"
-fi
 if [ "$ADMIN" = 1 ]; then
     echo "Admin channel: dials $ENV_ADMIN_CONNECT as $ENV_ADMIN_SERVER_ID"
 else

@@ -5,7 +5,6 @@ TMP='/home/bf2/tmp'
 
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
-MODMANAGER_ZIP="$TMP/ModManager-v2.2c.zip"
 OPENBF2_ZIP="$TMP/openbf2-serverext-824d4dc-c14b561-7e37854-bf2hub.zip"
 MAPS="$TMP/maps"
 LEVELS="$TMP/srv/mods/bf2/levels"
@@ -50,9 +49,6 @@ chmod +x $INSTALLER ./extract
 unzip -o $OPENBF2_ZIP -d "$TMP/srv/bin/amd-64"
 mv "$TMP/srv/bin/amd-64/source.txt" "$TMP/srv/openbf2-source.txt"
 
-# Move ModManager files into server directory
-unzip $MODMANAGER_ZIP -d "$TMP/srv"
-
 # Clean up unused folders, OpenBF2 has no PunkBuster
 rm -r $TMP/srv/pb_* $TMP/srv/bin/ia-32
 
@@ -86,14 +82,14 @@ if [ -d levels ]; then
     done
 fi
 
-# Replace with our own BF2 server files (custom settings and scripts)
+# Replace with our own BF2 server files (custom settings, the admin script admin/netsky.py and the demo hook)
 cp -r "$TMP/bf2/." "$TMP/srv"
 
 # The server runs the demo hook directly
 chmod +x "$TMP/srv/adminutils/demo/rotate_demo.py"
 
 # Keep the settings as templates, run.sh renders them from the environment on every start
-for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/modmanager.con mods/bf2/settings/serversettings.con; do
+for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/serversettings.con; do
     mkdir -p "$TEMPLATES/$(dirname "$file")"
     cp "$TMP/srv/$file" "$TEMPLATES/$file"
 done

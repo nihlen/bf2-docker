@@ -3,7 +3,7 @@
 # Usage: tests/run.sh <static|build|smoke|all> [--keep] [image...]
 #   static  check asset lists, checksums, maplists and map changes, and shellcheck the scripts
 #   build   build the images and check the server files inside them (--keep saves the maps to tests/out/<image>)
-#   smoke   start the images and check that the server, RCON and web server work
+#   smoke   start the images and check that the server, admin script, RCON or GameSpy query and web server work
 set -uo pipefail
 cd "$(dirname "$0")/.." || exit 2
 

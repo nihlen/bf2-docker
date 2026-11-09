@@ -70,9 +70,9 @@ Images used for the NeTskY servers. Based on bf2hub-pb-mm-webadmin with custom s
 - [netsky-openbf2-chopper-mayhem](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-chopper-mayhem): netsky-chopper-mayhem on OpenBF2
 - [netsky-openbf2-dogfight](https://github.com/nihlen/bf2-docker/tree/master/images/netsky-openbf2-dogfight): netsky-dogfight on OpenBF2
 
-The netsky images above with the server binaries replaced by [OpenBF2](https://github.com/B2BF/OpenBF2), an open source implementation, plus two OpenBF2 modules: `libbf2hub.so` ([OpenBF2-BF2Hub](https://github.com/B2BF/OpenBF2-BF2Hub)) for BF2Hub, and `libserverext.so` (openbf2-server-ext), the admin channel that [BF2WebAdmin](https://github.com/nihlen/BF2WebAdmin) (branch `admin-channel`) uses instead of `mm_webadmin.py`. They keep the settings, maps and ModManager configuration of their netsky counterparts, except:
+The netsky images above with the server binaries replaced by [OpenBF2](https://github.com/B2BF/OpenBF2), an open source implementation, plus two OpenBF2 modules: `libbf2hub.so` ([OpenBF2-BF2Hub](https://github.com/B2BF/OpenBF2-BF2Hub)) for BF2Hub, and `libserverext.so` (openbf2-server-ext), the admin channel that [BF2WebAdmin](https://github.com/nihlen/BF2WebAdmin) (branch `admin-channel`) uses instead of `mm_webadmin.py`. They keep the settings and maps of their netsky counterparts, except:
 
-- `mm_webadmin` is not loaded. ModManager with `mm_rcon` (4711) and `mm_iga` stays, BF2WebAdmin still uses RCON and `iga` for kicks, bans and the admin list.
+- No ModManager and no RCON (port 4711). BF2WebAdmin kicks, bans and runs console commands over the admin channel, and bans stay in the server's own `banlist.con`. The admin script is `admin/netsky.py` (`sv.adminScript "netsky"`), a port of the one ModManager module still in use, `mm_autobalance` as configured before (`roundSwitch 1`, no commander or squad balancing): a connecting player joins the team with fewer players, every player swaps teams at the end of a round, and with `sv.autoBalanceTeam 1` (off in these images) dying players and team changes are balanced. It writes `netsky: admin script loaded` to the server console when it starts.
 - `sv.punkBuster 0` and no PunkBuster files, OpenBF2 has no PunkBuster.
 - No `bf2tool.php` and no PHP (`ENV_API_KEY` is gone). nginx only serves the demos at `/demos/`.
 - `debian:trixie-slim`, since OpenBF2 needs a newer glibc.
@@ -89,7 +89,6 @@ The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.z
 | `ENV_GAMESPY_PORT` | `29900` | `sv.gameSpyPort`, the query port (udp) |
 | `ENV_INTERNET` | `1` | `sv.internet`, 0 for a LAN server that is not listed on the master server |
 | `ENV_DEMOS_URL` | `http://example.com/demos/` | `sv.demoIndexURL` and `sv.demoDownloadURL` |
-| `ENV_RCON_PASSWORD` | random, printed in the log | ModManager RCON password (port 4711) |
 | `ENV_ADMIN_CONNECT` | none | BF2WebAdmin's admin channel listener, `<host>:<port>` (e.g. `bf2wa.nihlen.net:4300`). The module dials it over TLS |
 | `ENV_ADMIN_SERVER_ID` | none | The server's id in BF2WebAdmin (`Server.ServerId`, e.g. `<public ip>:<game port>`) |
 | `ENV_ADMIN_KEY` | none | The server's admin key in BF2WebAdmin (`Server.AdminKey`), 32 to 128 hex digits |
@@ -99,19 +98,18 @@ The binaries come from one zip, `openbf2-serverext-<openbf2>-<module>-<bf2hub>.z
 | `ENV_BOT_PORT` | `16700` | The module's bot channel, always on `127.0.0.1` inside the container. It has no authentication, never publish it |
 | `ENV_SPONSOR_VARS` | `website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com` | [sponsortext](https://github.com/cetteup/sponsortext) variables, added as ` $vars:<value>$` after the image's description in `sv.sponsorText`, which server browsers read from the GameSpy query. `key=value` pairs separated by `;` (escape `=`, `;`, `$` and `\` in a value with `\`); no double quotes. Set but empty: no variables |
 
-Set all four `ENV_ADMIN_*` variables or none. Without them the module dials nowhere (the log says `admin channel: off`), and `run.sh` refuses to start with only some of them. The module's other settings are fixed in the rendered `serverext.cfg`: `stepMode 0`, `allowTeleport 0`, `allowRoundRestart 0`, `adminAllowConsole 1`. The `ENV_BF2WEBADMIN_*` variables of the other netsky images are gone.
+Set all four `ENV_ADMIN_*` variables or none. Without them the module dials nowhere (the log says `admin channel: off`), and `run.sh` refuses to start with only some of them. The module's other settings are fixed in the rendered `serverext.cfg`: `stepMode 0`, `allowTeleport 0`, `allowRoundRestart 0`, `adminAllowConsole 1`. The `ENV_BF2WEBADMIN_*` variables of the other netsky images are gone, and `ENV_RCON_PASSWORD` is ignored.
 
 **What persists.** Only `/volume`, mounted from the host or a named volume. `/home/bf2/srv` must not be mounted (a volume there would keep the server files of an older image), `run.sh` refuses to start if it is.
 
 | Path | |
 |---|---|
 | `/volume/settings/banlist.con` | BF2's ban list |
-| `/volume/settings/mm_bans.xml` | ModManager's ban list (`iga ban`) |
 | `/volume/demos/pending`, `/volume/demos/uploaded` | Demos being recorded, and the finished ones nginx serves at `/demos/` (`rotate_demo.py` keeps 50) |
-| `/volume/bf2.log`, `/volume/modmanager.log` | The server console and ModManager's log of this start, `.1` of the previous start |
+| `/volume/bf2.log` | The server console of this start, `bf2.log.1` of the previous start |
 | `/volume/logs` | Module logs (`logs/bf2hub`) |
 
-The rendered settings are not in `/volume`. An older `/volume` keeps its previous copies of `maplist.con`, `modmanager.con` and `serversettings.con` as `<file>.old`, and the links to the rendered files that an earlier image of these made there for `bf2tool.php` are removed. The module's own log lines go to `docker logs`.
+The rendered settings are not in `/volume`. An older `/volume` keeps its previous copies of `maplist.con`, `modmanager.con` and `serversettings.con` as `<file>.old`, and the links to the rendered files that an earlier image of these made there for `bf2tool.php` are removed. `mm_bans.xml` and `modmanager.log` from an image with ModManager are no longer used and can be deleted. The module's own log lines go to `docker logs`.
 
 ```yaml
 services:
@@ -126,7 +124,6 @@ services:
       - ENV_SERVER_PORT=16567
       - ENV_GAMESPY_PORT=29900
       - ENV_DEMOS_URL=http://www.example.com:8000/
-      - ENV_RCON_PASSWORD=rconpw123
       - ENV_ADMIN_CONNECT=bf2wa.nihlen.net:4300
       - ENV_ADMIN_SERVER_ID=203.0.113.10:16567
       - ENV_ADMIN_KEY=<hex key from BF2WebAdmin>
@@ -135,7 +132,6 @@ services:
       - "/data/bf2/bf2-netsky-openbf2-2v2/volume:/volume"
     ports:
       - "8000:80/tcp"
-      - "4711:4711/tcp"
       - "16567:16567/udp"
       - "29900:29900/udp"
 ```
