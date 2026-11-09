@@ -235,7 +235,12 @@ def run_checks(image, container, rcon_password, api_key):
         # query, which server browsers read
         check(results, "nothing listens on the RCON port %d" % RCON_PORT, not tcp_port_listening(container, RCON_PORT))
 
-        query = wait_for("the GameSpy query", lambda: gamespy_query(host_port(container, QUERY_PORT, "udp")), container, timeout=60)
+        # The query answers as soon as the port is open, with empty keys until the level has loaded (slower on CI)
+        def loaded_query():
+            query = gamespy_query(host_port(container, QUERY_PORT, "udp"))
+            return query if query and query.get("hostname") and query.get("mapname") else None
+
+        query = wait_for("the GameSpy query with a loaded level", loaded_query, container, timeout=STARTUP_TIMEOUT)
         check(results, "GameSpy query answers", True)
         hostname = query.get("hostname")
         check(results, "server name set from ENV_SERVER_NAME", hostname == SERVER_NAME, "got '%s'" % hostname)
