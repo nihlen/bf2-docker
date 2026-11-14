@@ -1,2 +1,2 @@
 https://static.nihlen.net/bf2/server/bf2-linuxded-1.5.3153.0-installer.tgz
-https://static.nihlen.net/bf2/server/openbf2-serverext-824d4dc-c14b561-7e37854-bf2hub.zip
+https://static.nihlen.net/bf2/server/openbf2-serverext-9deb711-97a28e7-7e37854-bf2hub.zip
