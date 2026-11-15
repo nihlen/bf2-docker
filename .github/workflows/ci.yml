@@ -79,7 +79,9 @@ jobs:
     name: ${{ matrix.image }}
     needs: changes
     if: needs.changes.outputs.images != '[]'
-    runs-on: ubuntu-latest
+    # Not ubuntu-latest: on ubuntu-26.04 the BF2CC Daemon's Mono 1.1.12 (bf2hub-pb-mm-bf2cc) crashes at start, in
+    # System.Net.Dns.Resolve. The other images pass their tests there too
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       id-token: write # Tailscale federated identity
