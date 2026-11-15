@@ -124,6 +124,14 @@ jobs:
           tags: tag:ci
           ping: pve-gateway
 
+      # For the log: the runner's NAT (MappingVariesByDestIP: true is a NAT that Tailscale can't punch through) and
+      # whether the registry is reached directly or through a relay (DERP)
+      - name: Show the Tailscale connection
+        if: steps.push.outputs.push == 'true'
+        run: |
+          sudo tailscale netcheck || true
+          sudo tailscale ping -c 5 pve-gateway || true
+
       - name: Log in to the container registry
         if: steps.push.outputs.push == 'true'
         uses: docker/login-action@v3
