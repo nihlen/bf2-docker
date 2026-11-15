@@ -2,10 +2,11 @@ name: CI
 
 # Tests all images and builds, smoke tests and pushes the images that changed.
 # Images are pushed from the branches in PUSH_BRANCHES and from manual runs, never from pull requests:
-#   images/netsky-<name>  ->  $REGISTRY/$PROJECT/bf2-netsky:<name>
-#   images/<name>         ->  $REGISTRY/$PROJECT/bf2-docker:<name>
+#   images/<image>  ->  $REGISTRY/$PROJECT/bf2-docker:<image>
 # They are pushed over the tailnet to $PUSH_REGISTRY (the same Harbor, tailnet only), since the image layers are
 # larger than Cloudflare's 100 MB upload limit on $REGISTRY.
+# They are not pushed to Docker Hub or GitHub's registry: the images hold EA's server files, whose license
+# (readmes/eula.txt in the server) does not allow distributing them.
 #
 # Repository settings:
 #   secrets.CR_USERNAME, secrets.CR_PASSWORD         Container registry account with push access
@@ -135,10 +136,7 @@ jobs:
         env:
           IMAGE: ${{ matrix.image }}
         run: |
-          case "$IMAGE" in
-            netsky-*) repo="$PROJECT/bf2-netsky:${IMAGE#netsky-}" ;;
-            *) repo="$PROJECT/bf2-docker:$IMAGE" ;;
-          esac
+          repo="$PROJECT/bf2-docker:$IMAGE"
           docker tag "bf2-docker-test/$IMAGE" "$PUSH_REGISTRY/$repo"
           docker push "$PUSH_REGISTRY/$repo"
           echo "Pushed \`$REGISTRY/$repo\`" >> "$GITHUB_STEP_SUMMARY"

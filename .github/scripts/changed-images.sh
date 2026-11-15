@@ -1,5 +1,5 @@
 #!/bin/bash
-# Prints a JSON array of the images to build, e.g. ["netsky-2v2","netsky-inf"]
+# Prints a JSON array of the images to build, e.g. ["openbf2","netsky-openbf2-2v2"]
 # Usage: .github/scripts/changed-images.sh <base commit|all> [head commit]
 #   An image is selected if a file in images/<image>/ changed since the base commit.
 #   All images are selected if shared files changed, or the base is "all", empty or unknown (e.g. a new branch).
@@ -12,9 +12,12 @@ HEAD="${2:-HEAD}"
 # Changes to these affect every image
 SHARED='^(tests/|\.github/|\.gitattributes$)'
 
+# A folder without a Dockerfile is not an image (e.g. the placeholder netsky-openbf2-inf)
 all_images() {
     for dir in images/*/; do
-        basename "$dir"
+        if [ -f "$dir/Dockerfile" ]; then
+            basename "$dir"
+        fi
     done
 }
 

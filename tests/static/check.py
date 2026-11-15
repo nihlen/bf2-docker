@@ -9,6 +9,27 @@ import re
 import sys
 
 STOCK_MAPS = os.path.join(os.path.dirname(__file__), "..", "stock-maps.txt")
+IMAGES = os.path.join(os.path.dirname(__file__), "..", "..", "images")
+# Image folders are self-contained copies, so these files are kept the same by hand in every image of a family:
+# (name, the file that makes an image a member, the files that must be the same in all members)
+FAMILIES = [
+    ("OpenBF2", "assets/build/bf2/mods/bf2/openbf2.con", [
+        ".dockerignore",
+        "Dockerfile",
+        "assets/build/assets.sha512",
+        "assets/build/assets.txt",
+        "assets/build/bf2/adminutils/demo/rotate_demo.py",
+        "assets/build/bf2/rotate_demo.cfg",
+        "assets/build/build.sh",
+        "assets/build/extract",
+        "assets/runtime/nginx/default",
+        "assets/runtime/run.sh",
+        "assets/runtime/setup.sh",
+    ]),
+    ("netsky admin script", "assets/build/bf2/admin/netsky.py", [
+        "assets/build/bf2/admin/netsky.py",
+    ]),
+]
 SHA512_LINE = re.compile(r"^[0-9a-f]{128}  (\S+)$")
 MAPLIST_LINE = re.compile(r"^\s*maplist\.append\s+(\S+)", re.IGNORECASE)
 
@@ -87,8 +108,40 @@ def check_maps(image, errors, map_archives):
                 errors.append("levels/%s/server.zip: folder is empty" % name)
 
 
+def read_normalized(path):
+    """The file's bytes with LF line endings (a Windows checkout has CRLF in some files), None if it is missing."""
+    if not os.path.isfile(path):
+        return None
+    with open(path, "rb") as f:
+        return f.read().replace(b"\r\n", b"\n")
+
+
+def check_families(images_dir):
+    """Check every image folder, whichever images were asked for: a change to one image can break its family."""
+    errors = []
+    images = sorted(d for d in os.listdir(images_dir) if os.path.isfile(os.path.join(images_dir, d, "Dockerfile")))
+    for name, marker, shared in FAMILIES:
+        members = [i for i in images if os.path.isfile(os.path.join(images_dir, i, *marker.split("/")))]
+        for path in shared:
+            # The images grouped by the content of the file
+            groups = {}
+            for image in members:
+                groups.setdefault(read_normalized(os.path.join(images_dir, image, *path.split("/"))), []).append(image)
+            if len(groups) > 1:
+                parts = ["%s (%s)" % (", ".join(group), "missing" if content is None else "%d bytes" % len(content))
+                         for content, group in sorted(groups.items(), key=lambda item: item[1])]
+                errors.append("%s images: %s differs: %s" % (name, path, " / ".join(parts)))
+    return errors
+
+
 def main(images):
     failed = False
+    family_errors = check_families(IMAGES)
+    for error in family_errors:
+        print("FAIL %s" % error)
+    if not family_errors:
+        print("ok   shared files are the same within each image family")
+    failed = bool(family_errors)
     for image in images:
         errors = []
         check_checksums(image, errors, "assets.txt", "assets.sha512")

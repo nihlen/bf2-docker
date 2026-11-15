@@ -1,14 +1,24 @@
 #!/bin/sh
+# Builds the server files of an OpenBF2 image. This script is the same in every OpenBF2 image (tests/static/check.py
+# checks that): what an image is comes from its data, bf2/ (settings, mods/bf2/openbf2.con, admin scripts), maps.txt
+# and levels/.
 set -e
 
 TMP='/home/bf2/tmp'
 
 INSTALLER="$TMP/bf2-linuxded-1.5.3153.0-installer.sh"
 INSTALLER_TGZ="$TMP/bf2-linuxded-1.5.3153.0-installer.tgz"
-OPENBF2_ZIP="$TMP/openbf2-serverext-9deb711-97a28e7-7e37854-bf2hub.zip"
 MAPS="$TMP/maps"
 LEVELS="$TMP/srv/mods/bf2/levels"
 TEMPLATES="$TMP/templates"
+OPENBF2_CON="$TMP/bf2/mods/bf2/openbf2.con"
+
+# The OpenBF2 release zip is the one listed in assets.txt, so a new release only changes assets.txt and assets.sha512
+OPENBF2_ZIP=$(sed -n 's|^[^ ]*/\(openbf2-[^/ ]*\.zip\)[[:space:]]*$|\1|p' assets.txt)
+if [ -z "$OPENBF2_ZIP" ] || [ "$(echo "$OPENBF2_ZIP" | wc -l)" != 1 ]; then
+    echo 'assets.txt must list exactly one openbf2-*.zip. Exiting.'
+    exit 1
+fi
 
 # Get required packages
 apt -y update
@@ -46,8 +56,16 @@ chmod +x $INSTALLER ./extract
 
 # Replace the server binaries with OpenBF2 and add its modules libbf2hub.so (BF2Hub) and libserverext.so (the admin
 # channel to BF2WebAdmin). The zip's source.txt records the commits they were built from
-unzip -o $OPENBF2_ZIP -d "$TMP/srv/bin/amd-64"
+unzip -o "$TMP/$OPENBF2_ZIP" -d "$TMP/srv/bin/amd-64"
 mv "$TMP/srv/bin/amd-64/source.txt" "$TMP/srv/openbf2-source.txt"
+
+# Keep only the modules that the image's mods/bf2/openbf2.con loads (openbf2.addModDll "<name>" loads lib<name>.so).
+# run.sh sets up the admin channel only in an image that still has libserverext.so
+for module in bf2hub serverext; do
+    if ! tr -d '\r' < "$OPENBF2_CON" | grep -Eq "^[[:space:]]*openbf2\.addModDll[[:space:]]+\"?$module\"?[[:space:]]*$"; then
+        rm "$TMP/srv/bin/amd-64/lib$module.so"
+    fi
+done
 
 # Clean up unused folders, OpenBF2 has no PunkBuster
 rm -r $TMP/srv/pb_* $TMP/srv/bin/ia-32
@@ -79,13 +97,14 @@ if [ -d levels ]; then
     done
 fi
 
-# Replace with our own BF2 server files (custom settings, the admin script admin/netsky.py and the demo hook)
+# Replace with our own BF2 server files (settings, openbf2.con, admin scripts and the demo hook)
 cp -r "$TMP/bf2/." "$TMP/srv"
 
 # The server runs the demo hook directly
 chmod +x "$TMP/srv/adminutils/demo/rotate_demo.py"
 
-# Keep the settings as templates, run.sh renders them from the environment on every start
+# Keep the settings as templates, run.sh renders them from the environment on every start. An image without its own
+# maplist.con keeps the stock one
 for file in mods/bf2/openbf2.con mods/bf2/settings/maplist.con mods/bf2/settings/serversettings.con; do
     mkdir -p "$TEMPLATES/$(dirname "$file")"
     cp "$TMP/srv/$file" "$TEMPLATES/$file"

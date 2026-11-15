@@ -1,4 +1,6 @@
 #!/bin/sh
+# Sets up the runtime stage of an OpenBF2 image. This script is the same in every OpenBF2 image
+# (tests/static/check.py checks that).
 set -e
 
 HOME_DIR='/home/bf2'
@@ -6,7 +8,7 @@ TMP='/home/bf2/tmp'
 
 # Get required packages and create our user
 # libncursesw6 + libstdc++6 = run bf2 (OpenBF2) and libbf2hub.so
-# libssl3t64 = libserverext.so (the admin channel's TLS)
+# libssl3t64 = libserverext.so (the admin channel's TLS), in the images that load it
 # python3 = rotate_demo.py
 # nginx = host the demos
 apt -y update

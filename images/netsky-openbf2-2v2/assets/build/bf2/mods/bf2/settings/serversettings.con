@@ -1,3 +1,4 @@
+rem default ENV_SPONSOR_VARS=website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com
 sv.serverName "{{server_name}}"
 sv.password ""
 sv.internet {{internet}}

@@ -1,0 +1,25 @@
+# nginx serves the finished demos (rotate_demo.py moves them to /volume/demos/uploaded) for sv.demoIndexURL and
+# sv.demoDownloadURL, nothing else
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name _;
+
+    location / {
+        return 404;
+    }
+
+    location /demos/ {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        alias /volume/demos/uploaded/;
+        try_files $uri $uri/ =404;
+        autoindex on;
+        autoindex_format json;
+    }
+
+    location ~ ([^\/]+\.bf2demo)$ {
+        alias /volume/demos/uploaded/$1;
+    }
+}

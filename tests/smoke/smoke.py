@@ -9,11 +9,14 @@ Checks, depending on what the image contains:
 - the image's own admin script (sv.adminScript, admin/<name>.py) loads without errors
 - with ModManager: RCON login works, the server name is set from ENV_SERVER_NAME,
   and the maps in maplist.con and the modules in modmanager.con are loaded
-- with an admin script instead of ModManager: nothing listens on the RCON port, and the GameSpy query reports
-  the server name from ENV_SERVER_NAME, the sponsortext variables and the first map in maplist.con
+- OpenBF2: the GameSpy query reports the server name from ENV_SERVER_NAME, the image's sponsortext variables, the
+  content check and the first map in maplist.con. With an admin script of the image's own, nothing listens on the
+  RCON port; with the stock one, RCON accepts a login with ENV_RCON_PASSWORD and runs a command
 - the demo hook moves a demo to the web server, where it is listed and downloadable
-- bf2tool.php returns the settings with the API key and refuses without it
 - the container keeps running
+- OpenBF2, in a second container: ENV_CONTENT_CHECK=0 removes the fingerprint files, there is no RCON password file
+  without ENV_RCON_PASSWORD, and a template in /volume/templates is used instead of the image's; without the server
+  extension, ENV_ADMIN_* is refused
 """
 
 import hashlib
@@ -23,6 +26,7 @@ import secrets
 import socket
 import subprocess
 import sys
+import tempfile
 import time
 import urllib.error
 import urllib.request
@@ -33,7 +37,7 @@ QUERY_PORT = 29900
 RCON_PORT = 4711
 STARTUP_TIMEOUT = 300
 SERVER_NAME = "bf2-docker smoke test"
-SPONSOR_VARS = "$vars:website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com$"
+CONTENT_CHECK_FILES = ["std_archive.md5", "std_archive_mod.md5", "bst_archive.md5", "bst_archive_mod.md5"]
 # What OpenBF2 writes when an admin script fails to load, or its update() fails
 ADMIN_ERRORS = r"admin: (failed to import|\S+: you must provide the functions|\S+: init function failed)|error: admin update failed"
 
@@ -168,7 +172,7 @@ def check(results, name, ok, detail=""):
     print("%s %s%s" % ("ok  " if ok else "FAIL", name, ": " + detail if detail and not ok else ""))
 
 
-def run_checks(image, container, rcon_password, api_key):
+def run_checks(image, container, rcon_password):
     results = []
     build = os.path.join(image, "assets", "build")
     runtime = os.path.join(image, "assets", "runtime")
@@ -177,11 +181,13 @@ def run_checks(image, container, rcon_password, api_key):
     settings = os.path.join(build, "bf2", "mods", "bf2", "settings", "serversettings.con")
     settings_text = open(settings, encoding="utf-8").read() if os.path.isfile(settings) else ""
     has_sponsor_vars = "{{sponsor_vars}}" in settings_text
+    # The image's default for ENV_SPONSOR_VARS, a "rem default" line in the template (see run.sh)
+    match = re.search(r"^rem default ENV_SPONSOR_VARS=(.*?)\r?$", settings_text, re.MULTILINE)
+    sponsor_vars = match.group(1) if match else ""
     # The image's own admin script, admin/<name>.py (not ModManager's, which comes from its zip)
     match = re.search(r'^\s*sv\.adminScript\s+"?(\w+)', settings_text, re.IGNORECASE | re.MULTILINE)
     admin_script = match.group(1) if match and os.path.isfile(os.path.join(build, "bf2", "admin", match.group(1) + ".py")) else None
     has_nginx = os.path.isdir(os.path.join(runtime, "nginx"))
-    has_bf2tool = os.path.isfile(os.path.join(runtime, "www", "bf2tool.php"))
     has_demo_hook = os.path.isfile(os.path.join(build, "bf2", "adminutils", "demo", "rotate_demo.py"))
 
     wait_for("the bf2 process", lambda: bf2_running(container), container)
@@ -192,7 +198,8 @@ def run_checks(image, container, rcon_password, api_key):
 
     # OpenBF2 reports every module it loads from mods/bf2/openbf2.con on the console
     openbf2_con = os.path.join(build, "bf2", "mods", "bf2", "openbf2.con")
-    if os.path.isfile(openbf2_con):
+    is_openbf2 = os.path.isfile(openbf2_con)
+    if is_openbf2:
         with open(openbf2_con, encoding="utf-8") as f:
             modules = re.findall(r'^\s*openbf2\.addModDll\s+"?(\w+)', f.read(), re.IGNORECASE | re.MULTILINE)
         console = container_exec(container, "cat %s/bf2.log" % SRV)
@@ -230,10 +237,17 @@ def run_checks(image, container, rcon_password, api_key):
         missing = [m for m in expected_modules if m not in modules]
         check(results, "%d ModManager modules loaded" % len(expected_modules), not missing, "missing %s" % ", ".join(missing))
         rcon.close()
-    elif admin_script:
-        # The image's admin script instead of ModManager, so no RCON: the settings are checked through the GameSpy
-        # query, which server browsers read
-        check(results, "nothing listens on the RCON port %d" % RCON_PORT, not tcp_port_listening(container, RCON_PORT))
+    elif is_openbf2:
+        # An image's own admin script has no RCON. The stock one (admin/default.py) has, with the password from
+        # ENV_RCON_PASSWORD; it speaks the protocol that ModManager's RCON took over
+        if admin_script:
+            check(results, "nothing listens on the RCON port %d" % RCON_PORT, not tcp_port_listening(container, RCON_PORT))
+        else:
+            rcon = wait_for("RCON login", lambda: connect_rcon(host_port(container, RCON_PORT), rcon_password), container)
+            check(results, "RCON login with ENV_RCON_PASSWORD (stock admin script)", True)
+            name = rcon.command("exec sv.serverName").strip()
+            check(results, "RCON runs a console command", name == SERVER_NAME, "got '%s'" % name)
+            rcon.close()
 
         # The query answers as soon as the port is open, with empty keys until the level has loaded (slower on CI)
         def loaded_query():
@@ -245,10 +259,22 @@ def run_checks(image, container, rcon_password, api_key):
         hostname = query.get("hostname")
         check(results, "server name set from ENV_SERVER_NAME", hostname == SERVER_NAME, "got '%s'" % hostname)
 
-        # sponsortext variables in sv.sponsorText (netsky-openbf2-*): the $ and ; must survive the settings file
+        # sponsortext variables in sv.sponsorText, the image's default: the $ and ; must survive the settings file
         if has_sponsor_vars:
             sponsor = query.get("bf2_sponsortext", "")
-            check(results, "sponsortext variables in sv.sponsorText", sponsor.endswith(" " + SPONSOR_VARS), "got '%s'" % sponsor)
+            if sponsor_vars:
+                check(results, "the image's sponsortext variables in sv.sponsorText",
+                      sponsor.endswith(" $vars:%s$" % sponsor_vars), "got '%s'" % sponsor)
+            else:
+                check(results, "no sponsortext variables in sv.sponsorText", "$vars:" not in sponsor, "got '%s'" % sponsor)
+
+        # ENV_CONTENT_CHECK is on by default: the server found its four fingerprint files
+        check(results, "content check on (bf2_pure)", query.get("bf2_pure") == "1", "got '%s'" % query.get("bf2_pure"))
+
+        # With the stock admin script there is no "loaded" line to wait for, so look for errors now
+        if not admin_script:
+            error = re.search(ADMIN_ERRORS, container_exec(container, "cat %s/bf2.log" % SRV))
+            check(results, "no admin script errors on the console", not error, error.group(0)[:200] if error else "")
 
         # The server starts with the first map in maplist.con. The query has the map's name with spaces (dalian plant)
         maps = config_values(container, SRV + "/mods/bf2/settings/maplist.con", r"^\s*maplist\.append\s+(\S+)\s+(\S+)")
@@ -274,34 +300,72 @@ def run_checks(image, container, rcon_password, api_key):
             status, _ = http_get(web, "/" + demo)
             check(results, "demo downloadable", status == 200, "status %s" % status)
 
-        if has_bf2tool:
-            status, _ = http_get(web, "/bf2tool.php?key=wrong&getsettings=maplist.con")
-            check(results, "bf2tool.php refuses a wrong key", status == 403, "status %s" % status)
-
-            status, body = http_get(web, "/bf2tool.php?key=%s&getsettings=maplist.con" % api_key)
-            settings = container_exec(container, "cat /volume/settings/maplist.con")
-            same = body.replace("\r\n", "\n").strip() == settings.replace("\r\n", "\n").strip()
-            check(results, "bf2tool.php returns settings", status == 200 and same,
-                  "status %s, body '%s'" % (status, body.strip()[:80]))
-
     time.sleep(5)
     check(results, "container still running", docker("inspect", "-f", "{{.State.Running}}", container).strip() == "true")
     return results
 
 
+def run_settings_checks(image, tag, name):
+    """OpenBF2 images: what run.sh does with settings that the main container doesn't use. No need to wait for the
+    server here, run.sh has rendered everything when it starts it."""
+    results = []
+    build = os.path.join(image, "assets", "build")
+    with open(os.path.join(build, "bf2", "mods", "bf2", "openbf2.con"), encoding="utf-8") as f:
+        has_serverext = bool(re.search(r'^\s*openbf2\.addModDll\s+"?serverext', f.read(), re.IGNORECASE | re.MULTILINE))
+    with open(os.path.join(build, "bf2", "mods", "bf2", "settings", "serversettings.con"), encoding="utf-8") as f:
+        template = f.read()
+    marker = "smoke test template %s" % secrets.token_hex(4)
+
+    container = name + "-settings"
+    docker("rm", "-f", container, check=False)
+    with tempfile.TemporaryDirectory() as tmp:
+        # docker cp copies the folder "volume" into /, so the template is /volume/templates/serversettings.con
+        os.makedirs(os.path.join(tmp, "volume", "templates"))
+        with open(os.path.join(tmp, "volume", "templates", "serversettings.con"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(re.sub(r"^sv\.welcomeMessage .*$", 'sv.welcomeMessage "%s"' % marker, template, flags=re.MULTILINE))
+        docker("create", "--name", container, "-e", "ENV_SERVER_NAME=" + SERVER_NAME, "-e", "ENV_INTERNET=0",
+               "-e", "ENV_CONTENT_CHECK=0", tag)
+        docker("cp", os.path.join(tmp, "volume"), container + ":/")
+    try:
+        docker("start", container)
+        wait_for("run.sh to start the server", lambda: "Starting Battlefield 2 server" in docker("logs", container),
+                 container, timeout=60)
+        left = container_exec(container, "cd %s/mods/bf2 && ls %s 2>/dev/null" % (SRV, " ".join(CONTENT_CHECK_FILES))).split()
+        check(results, "ENV_CONTENT_CHECK=0 removes the fingerprint files", not left, "left: %s" % ", ".join(left))
+        config = container_exec(container, "ls %s/admin/default.cfg 2>/dev/null" % SRV).strip()
+        check(results, "no RCON password file without ENV_RCON_PASSWORD", not config, "found %s" % config)
+        rendered = container_exec(container, "cat %s/mods/bf2/settings/serversettings.con" % SRV)
+        check(results, "/volume/templates/serversettings.con is used and rendered",
+              marker in rendered and 'sv.serverName "%s"' % SERVER_NAME in rendered and "{{" not in rendered,
+              "rendered: '%s'" % rendered[:200])
+    finally:
+        docker("rm", "-f", container, check=False)
+
+    if not has_serverext:
+        result = subprocess.run(["docker", "run", "--rm", "-e", "ENV_ADMIN_CONNECT=example.com:4300",
+                                 "-e", "ENV_ADMIN_SERVER_ID=smoke", "-e", "ENV_ADMIN_KEY=" + secrets.token_hex(16),
+                                 "-e", "ENV_ADMIN_CERT_SHA256=" + secrets.token_hex(32), tag],
+                                capture_output=True, text=True, timeout=120)
+        check(results, "ENV_ADMIN_* refused without the server extension",
+              result.returncode != 0 and "no server extension" in result.stderr,
+              "exit %d, '%s'" % (result.returncode, result.stderr.strip()[-200:]))
+    return results
+
+
 def main(image, tag):
     name = "bf2-docker-smoke-" + os.path.basename(os.path.normpath(image))
-    rcon_password, api_key = secrets.token_hex(8), secrets.token_hex(8)
+    rcon_password = secrets.token_hex(8)
     docker("rm", "-f", name, check=False)
     docker("run", "-d", "--name", name,
            "-e", "ENV_SERVER_NAME=" + SERVER_NAME,
            "-e", "ENV_RCON_PASSWORD=" + rcon_password,
            "-e", "ENV_BF2CCD_PASSWORD=" + secrets.token_hex(8),
-           "-e", "ENV_API_KEY=" + api_key,
            "-p", "127.0.0.1::%d/tcp" % RCON_PORT, "-p", "127.0.0.1::80/tcp", "-p", "127.0.0.1::%d/udp" % QUERY_PORT,
            tag)
     try:
-        results = run_checks(image, name, rcon_password, api_key)
+        results = run_checks(image, name, rcon_password)
+        if os.path.isfile(os.path.join(image, "assets", "build", "bf2", "mods", "bf2", "openbf2.con")):
+            results += run_settings_checks(image, tag, name)
         failed = [r for r in results if not r[1]]
     except SmokeTestError as e:
         print("FAIL %s" % e)

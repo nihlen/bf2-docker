@@ -21,14 +21,17 @@ fi
 if [ $# -gt 0 ]; then
     IMAGES=("$@")
 else
+    # A folder without a Dockerfile is not an image (e.g. the placeholder netsky-openbf2-inf)
     IMAGES=()
     for dir in images/*/; do
-        IMAGES+=("$(basename "$dir")")
+        if [ -f "$dir/Dockerfile" ]; then
+            IMAGES+=("$(basename "$dir")")
+        fi
     done
 fi
 
 for image in "${IMAGES[@]}"; do
-    if [ ! -d "images/$image" ]; then
+    if [ ! -f "images/$image/Dockerfile" ]; then
         echo "Unknown image: $image"
         exit 2
     fi
