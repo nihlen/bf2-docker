@@ -371,8 +371,13 @@ def main(image, tag):
         print("FAIL %s" % e)
         failed = [e]
     if failed:
+        # The state tells why a container stopped, and what it wrote to stderr is not in the output of docker()
+        print("--- container state: %s" % docker(
+            "inspect", "-f", "{{.State.Status}}, exit code {{.State.ExitCode}}, oom killed {{.State.OOMKilled}} {{.State.Error}}",
+            name, check=False).strip())
         print("--- container log (last 30 lines)")
-        print(docker("logs", "--tail", "30", name, check=False))
+        logs = subprocess.run(["docker", "logs", "--tail", "30", name], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+        print(logs.stdout)
     docker("rm", "-f", name, check=False)
     return 1 if failed else 0
 

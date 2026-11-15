@@ -130,13 +130,23 @@ jobs:
           username: ${{ secrets.CR_USERNAME }}
           password: ${{ secrets.CR_PASSWORD }}
 
-      # Push the image that was tested, overwriting the previous one
+      # Push the image that was tested, overwriting the previous one. The registry can lose the uploads that are in
+      # progress ("blob upload unknown to registry") and a push can hang, so a push that fails or takes too long is
+      # tried again; the layers that were pushed are kept
       - name: Push to the container registry
         if: steps.push.outputs.push == 'true'
+        timeout-minutes: 50
         env:
           IMAGE: ${{ matrix.image }}
         run: |
           repo="$PROJECT/bf2-docker:$IMAGE"
           docker tag "bf2-docker-test/$IMAGE" "$PUSH_REGISTRY/$repo"
-          docker push "$PUSH_REGISTRY/$repo"
-          echo "Pushed \`$REGISTRY/$repo\`" >> "$GITHUB_STEP_SUMMARY"
+          for attempt in 1 2 3; do
+            if timeout 15m docker push "$PUSH_REGISTRY/$repo"; then
+              echo "Pushed \`$REGISTRY/$repo\`" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "::warning::Push of $IMAGE failed or took more than 15 minutes (attempt $attempt of 3)"
+            sleep $((attempt * 30))
+          done
+          exit 1
