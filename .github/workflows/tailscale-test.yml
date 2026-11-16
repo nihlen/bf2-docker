@@ -1,0 +1,50 @@
+# Checks how GitHub runners reach the registry over the tailnet, without building or pushing anything.
+# Several jobs run at once, so some are likely to get a runner behind a NAT that Tailscale can't punch through
+# (MappingVariesByDestIP: true). A direct path shows "via <ip>:<port>", a relayed one "via DERP(...)".
+name: Tailscale test
+
+on:
+  workflow_dispatch:
+    inputs:
+      jobs:
+        description: Number of jobs to run at once
+        default: '8'
+
+permissions:
+  contents: read
+  id-token: write # Tailscale federated identity
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    outputs:
+      jobs: ${{ steps.jobs.outputs.jobs }}
+    steps:
+      - id: jobs
+        env:
+          JOBS: ${{ inputs.jobs }}
+        run: echo "jobs=$(seq -s, 1 "$JOBS" | sed 's/^/[/; s/$/]/')" >> "$GITHUB_OUTPUT"
+
+  ping:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        job: ${{ fromJSON(needs.prepare.outputs.jobs) }}
+    steps:
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          audience: ${{ secrets.TS_AUDIENCE }}
+          tags: tag:ci
+          ping: pve-gateway
+
+      - name: Show the Tailscale connection
+        run: |
+          sudo tailscale netcheck || true
+          sudo tailscale ping -c 10 pve-gateway || true
+          nat=$(sudo tailscale netcheck 2>/dev/null | grep -o 'MappingVariesByDestIP: [a-z]*' || true)
+          path=$(sudo tailscale ping -c 3 pve-gateway 2>/dev/null | tail -1 | grep -o 'via [^ ]*' || true)
+          echo "Job ${{ matrix.job }}: $nat, pve-gateway $path" >> "$GITHUB_STEP_SUMMARY"
