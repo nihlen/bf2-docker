@@ -84,6 +84,8 @@ CONTENT_CHECK="${ENV_CONTENT_CHECK:-1}"
 BOT_PORT="${ENV_BOT_PORT:-16700}"
 TV_AIM_FROM_MISSILE="${ENV_TV_AIM_FROM_MISSILE:-0}"
 TV_TURN_BEHIND="${ENV_TV_TURN_BEHIND:-0}"
+TV_KEEP_AIM_ON_RELOAD="${ENV_TV_KEEP_AIM_ON_RELOAD:-0}"
+TV_TRACE="${ENV_TV_TRACE:-0}"
 # sponsortext variables (https://github.com/cetteup/sponsortext) after the description in sv.sponsorText, read by
 # server browsers from the GameSpy query. Unset: the image's default, if it has one; set but empty: none
 SPONSOR_VARS="${ENV_SPONSOR_VARS-$(template_default ENV_SPONSOR_VARS)}"
@@ -99,6 +101,8 @@ case "$INTERNET" in 0|1) ;; *) fail "ENV_INTERNET must be 0 or 1, got '$INTERNET
 case "$CONTENT_CHECK" in 0|1) ;; *) fail "ENV_CONTENT_CHECK must be 0 or 1, got '$CONTENT_CHECK'" ;; esac
 is_decimal "$TV_AIM_FROM_MISSILE" || fail "ENV_TV_AIM_FROM_MISSILE must be metres (0 or more, e.g. 30 or 7.5), got '$TV_AIM_FROM_MISSILE'"
 is_uint "$TV_TURN_BEHIND" || fail "ENV_TV_TURN_BEHIND must be 0 (off) or 1 (on), got '$TV_TURN_BEHIND'"
+is_uint "$TV_KEEP_AIM_ON_RELOAD" || fail "ENV_TV_KEEP_AIM_ON_RELOAD must be 0 (off) or 1 (on), got '$TV_KEEP_AIM_ON_RELOAD'"
+case "$TV_TRACE" in 0|1) ;; *) fail "ENV_TV_TRACE must be 0 or 1, got '$TV_TRACE'" ;; esac
 case "$SPONSOR_VARS" in *'"'*|*'
 '*) fail 'ENV_SPONSOR_VARS must not contain double quotes or line breaks' ;; esac
 
@@ -188,6 +192,7 @@ replace_var "$SETTINGS/serversettings.con" demos_url "$DEMOS_URL"
 replace_var "$SETTINGS/serversettings.con" sponsor_vars "${SPONSOR_VARS:+ \$vars:$SPONSOR_VARS\$}"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_aim_from_missile "$TV_AIM_FROM_MISSILE"
 replace_var "$SRV/mods/bf2/openbf2.con" tv_turn_behind "$TV_TURN_BEHIND"
+replace_var "$SRV/mods/bf2/openbf2.con" tv_keep_aim_on_reload "$TV_KEEP_AIM_ON_RELOAD"
 if grep -l '{{' "$SRV/mods/bf2/openbf2.con" "$SETTINGS/maplist.con" "$SETTINGS/serversettings.con"; then
     fail 'placeholders left in the files above'
 fi
@@ -243,7 +248,7 @@ if [ "$SERVEREXT" = 1 ]; then
 fi
 
 echo "Server '$SERVER_NAME': game port $SERVER_PORT/udp, query port $GAMESPY_PORT/udp, internet $INTERNET, $MAX_PLAYERS players, content check $CONTENT_CHECK, demos $DEMOS_URL"
-echo "OpenBF2: tv-aim-from-missile $TV_AIM_FROM_MISSILE, tv-turn-behind $TV_TURN_BEHIND"
+echo "OpenBF2: tv-aim-from-missile $TV_AIM_FROM_MISSILE, tv-turn-behind $TV_TURN_BEHIND, tv-keep-aim-on-reload $TV_KEEP_AIM_ON_RELOAD"
 if [ "$RCON" = 1 ]; then
     echo 'RCON: on, 4711/tcp (the stock admin script)'
 elif [ "$ADMIN_SCRIPT" = default ]; then
@@ -266,8 +271,16 @@ service nginx start
 
 # Start Battlefield 2 server as the bf2 user
 # start.sh instead of start_bf2hub.sh, OpenBF2 loads its own libbf2hub.so from mods/bf2/openbf2.con
+# The TV missile trace is a diagnostic that OpenBF2 switches on from its environment, once, when it starts. "su -"
+# gives the server a new environment, so the two variables go into its command line. The trace holds 8192 rows per
+# start and is appended to /volume/tv-trace.log
+TRACE=''
+if [ "$TV_TRACE" = 1 ]; then
+    TRACE="BF2_TRACE_TV_MISSILES=1 BF2_TV_MISSILE_TRACE_FILE=$VOLUME/tv-trace.log "
+    echo "TV missile trace: on, $VOLUME/tv-trace.log (ENV_TV_TRACE)"
+fi
 echo "Starting Battlefield 2 server..."
 export TERM=xterm
-su -c "cd $SRV && ./start.sh >bf2.log" - bf2
+su -c "cd $SRV && $TRACE./start.sh >bf2.log" - bf2
 
 exit 0
