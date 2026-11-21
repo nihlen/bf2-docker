@@ -59,3 +59,10 @@ The container ports are published on random localhost ports, so the tests don't 
 python tests/tools/compare-levels.py /data/bf2/server/mods/bf2/levels tests/out/netsky-openbf2-dogfight/levels
 python tests/tools/compare-levels.py <reference> <levels> idf_arena idf_gulf   # only some maps
 ```
+
+[repack-map.py](tools/repack-map.py) repacks a downloaded map archive for a map server: one lowercase top folder,
+`info/<name>.desc` named after it, and entries removed from `server.zip` if given. Other files are copied byte for byte.
+
+```sh
+python -I tests/tools/repack-map.py DF_BLACKHOLE8.zip df_blackhole8.zip df_blackhole8 map.desc
+```

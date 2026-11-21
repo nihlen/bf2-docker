@@ -95,6 +95,20 @@ from another netsky image. Add it to README.md. CI finds it by its `Dockerfile` 
 **A custom map or a change to a map.** See "Custom maps" in README.md. A map in `maplist.con` must be a stock map
 (`tests/stock-maps.txt`) or in `maps.txt`.
 
+A new custom map from a zip, for a netsky image:
+
+1. Repack it: `python -I tests/tools/repack-map.py <in.zip> <out.zip> <name> [server.zip entries to drop]` makes the
+   folder `<name>` (lowercase) and `info/<name>.desc`. Compare it with an existing map first (`info/` holds the
+   `.desc` and the pngs, `server.zip`, `client.zip`) and ask the owner about anything else that differs.
+2. Upload `<name>.zip` to `bf2/maps/` on static.nihlen.net (the owner's storage box, over FTPS) and check that the
+   download's sha512 is the local one.
+3. Add the URL to `maps.txt` and `<sha512>  <name>.zip` to `maps.sha512` (both sorted), and
+   `maplist.append <name> gpm_cq <size>` to `maplist.con`. Copy the zip into `assets/build/maps/` so the build doesn't
+   download it.
+4. `tests/run.sh static`, `build <image>`, and `smoke <image>` once with the map first in `maplist.con` (the smoke
+   test checks that the first map loads), then put it back.
+5. Push to `master`: CI pushes the image, the servers pick it up on their next update.
+
 ## Tests
 
 Run from the repo root with bash (Git Bash on Windows); Docker must be running for everything but the first part of
