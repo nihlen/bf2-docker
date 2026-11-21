@@ -84,7 +84,9 @@ CONTENT_CHECK="${ENV_CONTENT_CHECK:-1}"
 BOT_PORT="${ENV_BOT_PORT:-16700}"
 TV_AIM_FROM_MISSILE="${ENV_TV_AIM_FROM_MISSILE:-0}"
 TV_TURN_BEHIND="${ENV_TV_TURN_BEHIND:-0}"
-TV_KEEP_AIM_ON_RELOAD="${ENV_TV_KEEP_AIM_ON_RELOAD:-0}"
+# Off in retail; an image can turn it on by default (rem default ENV_TV_KEEP_AIM_ON_RELOAD=1)
+TV_KEEP_AIM_ON_RELOAD="${ENV_TV_KEEP_AIM_ON_RELOAD:-$(template_default ENV_TV_KEEP_AIM_ON_RELOAD)}"
+TV_KEEP_AIM_ON_RELOAD="${TV_KEEP_AIM_ON_RELOAD:-0}"
 TV_INPUT_QUEUE="${ENV_TV_INPUT_QUEUE:-0}"
 TV_TRACE="${ENV_TV_TRACE:-0}"
 # sponsortext variables (https://github.com/cetteup/sponsortext) after the description in sv.sponsorText, read by

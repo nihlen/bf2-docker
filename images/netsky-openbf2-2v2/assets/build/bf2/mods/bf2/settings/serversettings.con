@@ -1,4 +1,5 @@
 rem default ENV_SPONSOR_VARS=website=https://bf2.nihlen.net/;discord=https://discord.gg/DPaJaMKAc3;provider=bf2hub.com
+rem default ENV_TV_KEEP_AIM_ON_RELOAD=1
 sv.serverName "{{server_name}}"
 sv.password ""
 sv.internet {{internet}}
